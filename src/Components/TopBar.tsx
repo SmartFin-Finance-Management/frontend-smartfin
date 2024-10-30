@@ -21,7 +21,7 @@ const TopBar: React.FC = () => {
      
       <Box>
         <Tooltip content="Click here to Login">
-          <Button colorScheme="teal" marginRight="1rem" onClick={handleLogin}>Login</Button>
+          <Button colorPalette={"teal"} marginRight="1rem" onClick={handleLogin}>Login</Button>
         </Tooltip>
         <Tooltip content="Click here to Register">
           <Button colorScheme="teal" marginRight="1rem" onClick={handleRegister}>Register</Button>
