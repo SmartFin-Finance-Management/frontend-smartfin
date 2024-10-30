@@ -5,6 +5,7 @@ import { Field } from '../Components/ui/field';
 import { PasswordInput } from "../Components/ui/password-input";
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
+import TopBarLogin from '../Components/topbarlogin';
 
 
 const LoginPage: React.FC = () => {
@@ -19,29 +20,32 @@ const LoginPage: React.FC = () => {
     navigate('/thome');
   }
   return (
+    <Box>
+    <TopBarLogin />
     <div className="login-container">
+      
       <Box className="card-root">
         <div className="card-header">
           <Text as="h2" className="card-title">Sign In</Text>
-          <Text className="card-description">Please enter your credentials below.</Text>
         </div>
         <div className="card-body">
-          <Stack spacing={4}>
+          <Stack >
             <Field label="Username">
               <Input className="input-field" placeholder="Enter your username" />
             </Field>
             <Field label="Password">
-              <PasswordInput className="input-field" placeholder="Enter your password" />
+              <PasswordInput  placeholder="Enter your password" size="lg" />
             </Field>
           </Stack>
         </div>
         <div className="card-footer">
-          <Button className="button button-solid" onClick={handleSignIn}>Sign In</Button>
-          <Button className="button button-outline" onClick={handleCancel}>Cancel</Button>
+          <Button className="gets" onClick={handleSignIn}>Sign In</Button>
+          <Button className="gets" onClick={handleCancel}>Cancel</Button>
         </div>
       </Box>
       <Footer />
     </div>
+  </Box>
   );
 };
 

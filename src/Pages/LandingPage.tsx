@@ -38,7 +38,7 @@ const LandingPage: React.FC = () => {
       <Stack align="center" justify="center" textAlign="center" height="80vh" position="relative" zIndex="2">
         {/* Logo */}
         <Box bg="white" p="6" borderRadius="md" marginBottom="4">
-          <Heading as="h1" fontSize="4xl" color="purple.800">
+          <Heading as="h1" fontSize="4xl" color="#546a7b">
             Smart Fin
           </Heading>
         </Box>

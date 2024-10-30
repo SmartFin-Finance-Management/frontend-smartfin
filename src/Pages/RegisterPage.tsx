@@ -5,6 +5,7 @@ import { Field } from '../Components/ui/field';
 import { PasswordInput } from "../Components/ui/password-input";
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
+import TopBarRegister from '../Components/TopBarRegister';
 
 const RegistrationPage: React.FC = () => {
 
@@ -14,8 +15,10 @@ const RegistrationPage: React.FC = () => {
     navigate('/');
   }
   return (
+    <Box>
+    <TopBarRegister />
     <div className="login-container">
-      <Box className="card-root">
+      <Box className="card-roots">
         <div className="card-header">
           <Text as="h2" className="card-title">Register</Text>
           <Text className="card-description">Create your account by filling out the details below.</Text>
@@ -29,20 +32,21 @@ const RegistrationPage: React.FC = () => {
               <Input className="input-field" type="email" placeholder="Enter your email" />
             </Field>
             <Field label="Password">
-              <PasswordInput className="input-field" placeholder="Create a password" />
+              <PasswordInput  placeholder="Create a password" />
             </Field>
             <Field label="Confirm Password">
-              <PasswordInput className="input-field" placeholder="Confirm your password" />
+              <PasswordInput  placeholder="Confirm your password" />
             </Field>
           </Stack>
         </div>
         <div className="card-footer">
-          <Button className="button button-solid" >Register</Button>
-          <Button className="button button-outline" onClick={handleCancel}>Cancel</Button>
+          <Button className="gets" >Register</Button>
+          <Button className="gets" onClick={handleCancel}>Cancel</Button>
         </div>
       </Box>
       <Footer/>
     </div>
+    </Box>
   );
 };
 
