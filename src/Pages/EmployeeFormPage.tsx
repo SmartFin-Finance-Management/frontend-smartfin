@@ -1,0 +1,200 @@
+import React, { useState } from 'react';
+
+interface EmployeeFormProps {
+  onSubmit: (data: IEmployeeForm) => void;
+}
+
+interface IEmployeeForm {
+  employee_id: number;
+  org_id: number;
+  client_id: number;
+  name: string;
+  email: string;
+  role: string;
+  employee_type: string;
+  experience: number;
+  lpa: number;
+  hourly_rate: number;
+  project_id: number;
+  project_history: number[];
+  project_manager_id: number;
+  attendance: Record<string, string>;
+}
+
+const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
+  const [formData, setFormData] = useState<IEmployeeForm>({
+    employee_id: 0,
+    org_id: 0,
+    client_id: 0,
+    name: '',
+    email: '',
+    role: '',
+    employee_type: '',
+    experience: 0,
+    lpa: 0,
+    hourly_rate: 0,
+    project_id: 0,
+    project_history: [],
+    project_manager_id: 0,
+    attendance: {},
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === 'experience' || name === 'lpa' || name === 'hourly_rate' ? Number(value) : value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.content}>
+        <div style={styles.titleContainer}>
+          <h2 style={styles.title}>Employee Registration Form</h2>
+        </div>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <label style={styles.label}>
+            Employee ID:
+            <input type="number" name="employee_id" value={formData.employee_id} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Organization ID:
+            <input type="number" name="org_id" value={formData.org_id} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Client ID:
+            <input type="number" name="client_id" value={formData.client_id} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Name:
+            <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Email:
+            <input type="email" name="email" value={formData.email} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Role:
+            <input type="text" name="role" value={formData.role} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Employee Type:
+            <select name="employee_type" value={formData.employee_type} onChange={handleChange} style={styles.input} required>
+              <option value="full">Full</option>
+              <option value="part-time">Part-Time</option>
+              <option value="contract">Contract</option>
+              <option value="intern">Intern</option>
+            </select>
+          </label>
+
+          <label style={styles.label}>
+            Experience (years):
+            <input type="number" name="experience" value={formData.experience} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            LPA:
+            <input type="number" name="lpa" value={formData.lpa} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Hourly Rate:
+            <input type="number" name="hourly_rate" value={formData.hourly_rate} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Project ID:
+            <input type="number" name="project_id" value={formData.project_id} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Project Manager ID:
+            <input type="number" name="project_manager_id" value={formData.project_manager_id} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <button type="submit" style={styles.button}>
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const styles: Record<string, React.CSSProperties> = {
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    maxWidth: '1200px',
+    margin: '2rem auto',
+    padding: '20px',
+    border: '1px solid #ddd',
+    background: "#fdfdff",
+    borderRadius: '10px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    fontFamily: 'Arial, sans-serif',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+  },
+  titleContainer: {
+    flex: 1,
+    marginRight: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  title: {
+    color: '#333',
+    fontSize: '2rem',
+  },
+  form: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  label: {
+    marginBottom: '10px',
+    color: '#333',
+    fontSize: '1rem',
+  },
+  input: {
+    width: '100%',
+    padding: '10px',
+    fontSize: '1rem',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    outline: 'none',
+    marginBottom: '15px',
+  },
+  button: {
+    width: '100%',
+    padding: '12px',
+    marginTop: '20px',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    transition: 'background-color 0.3s ease',
+  },
+};
+
+export default EmployeeFormPage;
