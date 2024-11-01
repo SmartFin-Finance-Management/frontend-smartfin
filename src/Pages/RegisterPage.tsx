@@ -14,6 +14,9 @@ const RegistrationPage: React.FC = () => {
   const handleCancel = () => {
     navigate('/');
   }
+  const handleRegister = () => {
+    navigate('/orgdetails');
+  }
   return (
     <Box>
     <TopBarRegister />
@@ -24,7 +27,7 @@ const RegistrationPage: React.FC = () => {
           <Text className="card-description">Create your account by filling out the details below.</Text>
         </div>
         <div className="card-body">
-          <Stack spacing={4}>
+          <Stack >
             <Field label="Username">
               <Input className="input-field" placeholder="Choose a username" />
             </Field>
@@ -40,7 +43,7 @@ const RegistrationPage: React.FC = () => {
           </Stack>
         </div>
         <div className="card-footer">
-          <Button className="gets" >Register</Button>
+          <Button className="gets" onClick={handleRegister} >Next</Button>
           <Button className="gets" onClick={handleCancel}>Cancel</Button>
         </div>
       </Box>
