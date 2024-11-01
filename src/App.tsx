@@ -24,13 +24,10 @@ const App: React.FC = () => {
                     <Route path="/project" element={<ProjectFormPage />} />
                     <Route path="/clientInput" element={<ClientInput />} />
                     <Route path="/clientManagement" element={<ClientManagement/>} />
-<<<<<<< HEAD
-                    <Route path="/orgdetails" element={<OrgDetails/>} />
-=======
                     <Route path="/EmployeeFormPage" element={<EmployeeFormPage />} />
                     <Route path="/OrgDetails" element={<OrgDetails />} />
                     
->>>>>>> 68b07d60c13df520a52f5c3ebf56ab053bac956d
+
                 </Routes>
             </Router>
         </Provider>
