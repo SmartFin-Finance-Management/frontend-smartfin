@@ -16,7 +16,7 @@ interface IClientForm {
   status: string;
 }
 
-const ClientFormPage: React.FC<ClientFormProps> = ({ onSubmit }) => {
+const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
   const [formData, setFormData] = useState<IClientForm>({
     client_id: 0,
     organization: '',
@@ -145,4 +145,4 @@ const styles: Record<string, React.CSSProperties> = {
   },
 };
 
-export default ClientFormPage;
+export default ClientInput;
