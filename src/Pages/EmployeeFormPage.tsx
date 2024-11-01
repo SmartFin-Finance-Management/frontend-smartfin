@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TopBar from '../Components/TopBar';
@@ -58,7 +58,9 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     e.preventDefault();
     // onSubmit(formData);
     // Show success toast
-    toast.success('Employee successfully created!', {
+    console.log(formData.employee_id);
+    
+    toast.success('Employee successfully created!'+formData.employee_id, {
       position: 'top-right', // Correct position string
       autoClose: 3000, // Auto close after 3 seconds
     });
@@ -70,6 +72,26 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     navigate('/');
   };
   
+  useEffect(() => {
+    const fetchEmployeeId = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/employee/getUniqueId');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setFormData(prev => ({
+          ...prev,
+          employee_id: data.max_employee_id + 1, // Set employee_id to max_employee_id + 1
+        }));
+      } catch (error) {
+        console.error('Failed to fetch unique employee ID:', error);
+        toast.error('Failed to fetch unique employee ID.'); // Show error toast
+      }
+    };
+
+    fetchEmployeeId();
+  }, []); // Empty dependency array to run only on mount
 
   return (
     <div>

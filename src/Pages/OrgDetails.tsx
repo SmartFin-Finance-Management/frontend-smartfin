@@ -13,7 +13,8 @@ interface RegistrationData {
     username: string;
     email: string;
     password: string; // Ideally, you shouldn't send passwords to the backend
-    org_id :number
+    org_id :number;
+    role:String;
   }
   
   interface OrgDetailsData {
@@ -58,13 +59,15 @@ interface RegistrationData {
       const response = await axios.get('http://localhost:7000/api/organisations/Orgp');
     
       // Assuming the API response has a structure like { org_id: <some value> }
-      const org_id = Number(response.data.org_id)+1;
+      const org_id = Number(response.data.max_org_id)+1;
+      console.log(org_id)
       // Create data objects
       const registrationData: RegistrationData = {
         username,
         email,
         password,
-        org_id
+        org_id:org_id,
+        role:"admin"
       };
   
       const orgDetailsData: OrgDetailsData = {
@@ -72,7 +75,7 @@ interface RegistrationData {
         type: orgType,
         address,
         contactInfo,
-        org_id
+        org_id:org_id
       };
   
       try {
