@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import TopBar from '../Components/TopBar';
 import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -54,7 +56,13 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    // onSubmit(formData);
+    // Show success toast
+    toast.success('Employee successfully created!', {
+      position: 'top-right', // Correct position string
+      autoClose: 3000, // Auto close after 3 seconds
+    });
+    
   };
 
   const handleCancel = () => {
@@ -80,10 +88,6 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
           <input type="number" name="org_id" value={formData.org_id} onChange={handleChange} style={styles.input} required />
         </label> */}
 
-          <label style={styles.label}>
-            Client ID:
-            <input type="number" name="client_id" value={formData.client_id} onChange={handleChange} style={styles.input} required />
-          </label>
 
           <label style={styles.label}>
             Name:
@@ -115,14 +119,19 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
             <input type="number" name="experience" value={formData.experience} onChange={handleChange} style={styles.input} required />
           </label>
 
-          <label style={styles.label}>
+          {/* <label style={styles.label}>
             LPA:
             <input type="number" name="lpa" value={formData.lpa} onChange={handleChange} style={styles.input} required />
-          </label>
+          </label> */}
 
           <label style={styles.label}>
             Hourly Rate:
             <input type="number" name="hourly_rate" value={formData.hourly_rate} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Client ID:
+            <input type="number" name="client_id" value={formData.client_id} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
@@ -144,6 +153,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
         </form>
       </div>
       <Footer />
+      <ToastContainer style={{ top: '5%', left: '50%', transform: 'translateX(-50%)' }} />
     </div>
   );
 };
@@ -151,7 +161,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
 const styles: Record<string, React.CSSProperties> = {
   container: {
     maxWidth: '600px',
-    margin: '2rem auto',
+    margin: '3rem auto',
     padding: '20px',
     border: '1px solid #ddd',
     borderRadius: '10px',
