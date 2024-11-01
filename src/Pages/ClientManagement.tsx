@@ -25,6 +25,7 @@ const ClientManagement: React.FC = () => {
 //     { client_id: 4, organization: 'Global Corp', name: 'Bob Brown', phone: '321-654-9870', email: 'bob@example.com' },
 //   ]);
   
+
   const [searchName, setSearchName] = useState('');
   const [searchOrg, setSearchOrg] = useState('');
   const [filteredClients, setFilteredClients] = useState<IClient[]>(clients);
