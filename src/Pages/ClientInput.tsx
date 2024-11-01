@@ -27,7 +27,7 @@ const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
     status: 'active',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -49,37 +49,84 @@ const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
 
           <label style={styles.label}>
             Client ID:
-            <input type="number" name="client_id" value={formData.client_id} onChange={handleChange} style={styles.input} required />
+            <input 
+              type="number" 
+              name="client_id" 
+              value={formData.client_id} 
+              onChange={handleChange} 
+              style={styles.input} 
+              required 
+            />
           </label>
 
           <label style={styles.label}>
             Organization ID:
-            <input type="text" name="organization" value={formData.organization} onChange={handleChange} style={styles.input} required />
+            <input 
+              type="text" 
+              name="organization" 
+              value={formData.organization} 
+              onChange={handleChange} 
+              style={styles.input} 
+              required 
+            />
           </label>
 
           <label style={styles.label}>
             Name:
-            <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
+            <input 
+              type="text" 
+              name="name" 
+              value={formData.name} 
+              onChange={handleChange} 
+              style={styles.input} 
+              required 
+            />
           </label>
 
           <label style={styles.label}>
             Phone:
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} style={styles.input} required />
+            <input 
+              type="tel" 
+              name="phone" 
+              value={formData.phone} 
+              onChange={handleChange} 
+              style={styles.input} 
+              required 
+            />
           </label>
 
           <label style={styles.label}>
             Email:
-            <input type="email" name="email" value={formData.email} onChange={handleChange} style={styles.input} required />
+            <input 
+              type="email" 
+              name="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              style={styles.input} 
+              required 
+            />
           </label>
 
           <label style={styles.label}>
             Address:
-            <input type="text" name="address" value={formData.address} onChange={handleChange} style={styles.input} required />
+            <textarea 
+              name="address" 
+              value={formData.address} 
+              onChange={handleChange} 
+              style={styles.textarea} 
+              required 
+            />
           </label>
 
           <label style={styles.label}>
             Status:
-            <select name="status" value={formData.status} onChange={handleChange} style={styles.input} required>
+            <select 
+              name="status" 
+              value={formData.status} 
+              onChange={handleChange} 
+              style={styles.input} 
+              required
+            >
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
@@ -132,6 +179,17 @@ const styles: Record<string, React.CSSProperties> = {
     outline: 'none',
     marginTop: '5px',
   },
+  textarea: {
+    width: '100%',
+    padding: '10px',
+    fontSize: '1rem',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    outline: 'none',
+    marginTop: '5px',
+    resize: 'vertical', // Allow vertical resizing
+    minHeight: '100px', // Minimum height
+  },
   button: {
     gridColumn: '1 / -1', // Span across both columns
     padding: '12px',
@@ -146,3 +204,4 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 export default ClientInput;
+
