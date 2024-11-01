@@ -58,7 +58,7 @@ interface RegistrationData {
       const response = await axios.get('http://localhost:7000/api/organisations/Orgp');
     
       // Assuming the API response has a structure like { org_id: <some value> }
-      const org_id = Number(response.data.org_id);
+      const org_id = Number(response.data.org_id)+1;
       // Create data objects
       const registrationData: RegistrationData = {
         username,
