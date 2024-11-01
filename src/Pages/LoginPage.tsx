@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   
   // State to manage username and password input
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleCancel = () => {
@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
     try {
       // Prepare login data
       const loginData = {
-        username,
+        email,
         password,
       };
 
@@ -56,12 +56,12 @@ const LoginPage: React.FC = () => {
           </div>
           <div className="card-body">
             <Stack>
-              <Field label="Username">
+              <Field label="Email">
                 <Input 
                   className="input-field" 
-                  placeholder="Enter your username" 
-                  value={username} 
-                  onChange={(e) => setUsername(e.target.value)} 
+                  placeholder="Enter your email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
                 />
               </Field>
               <Field label="Password">
