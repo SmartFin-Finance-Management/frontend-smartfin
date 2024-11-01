@@ -8,6 +8,8 @@ import { Provider } from './Components/ui/provider';
 import { ProjectFormPage } from './Pages/ProjectFormPage'
 import ClientInput from './Pages/ClientInput';
 
+import ClientManagement from './Pages/ClientManagement';
+
 
 const App: React.FC = () => {
     return (
@@ -19,6 +21,7 @@ const App: React.FC = () => {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/project" element={<ProjectFormPage />} />
                     <Route path="/clientInput" element={<ClientInput />} />
+                    <Route path="/clientManagement" element={<ClientManagement/>} />
                 </Routes>
             </Router>
         </Provider>

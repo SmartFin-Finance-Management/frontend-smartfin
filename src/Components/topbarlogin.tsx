@@ -16,9 +16,9 @@ const TopBarLogin: React.FC = () => {
   return (
   
      
-    <Box as="header" className='gets' display="flex" justifyContent="space-between" alignItems="center" padding="1rem"  color="white">
+    <Box as="header" className='gets'  display="flex" justifyContent="space-between" alignItems="center" padding="1rem"  color="white">
     {/* Increased font size to '2xl' and added custom font size */}
-    <Heading as="h2"  fontFamily="'Playfair Display', serif" fontSize="2rem">SmartFin</Heading>
+    <Heading as="h2"  fontFamily="'Playfair Display', serif" fontSize="2rem"  >SmartFin</Heading>
     <Box>
       <Tooltip content="Click here to Register">
         <Button background={'white'} marginRight="1rem" color={'#546a7b'} onClick={handleRegister}>Register</Button>
