@@ -1,192 +1,148 @@
-import React from 'react';
+import React, { useState } from 'react';
+import TopBar from '../Components/TopBar';
 import Footer from '../Components/Footer';
 
+interface ClientFormProps {
+  onSubmit: (data: IClientForm) => void;
+}
 
-const ClientInput: React.FC = () => {
+interface IClientForm {
+  client_id: number;
+  organization: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  status: string;
+}
+
+const ClientFormPage: React.FC<ClientFormProps> = ({ onSubmit }) => {
+  const [formData, setFormData] = useState<IClientForm>({
+    client_id: 0,
+    organization: '',
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+    status: 'active',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   return (
-    <div style={styles.container}>
-      {/* Navigation Bar */}
-      <div style={styles.navBar}>
-        <h2 style={styles.title}>Client Input Form</h2>
-        <div style={styles.navButtons}>
-          <button style={styles.navButton}>Project</button>
-          <button style={styles.navButton}>Employee</button>
-          <button style={styles.navButton}>Client</button>
-          <button style={styles.searchButton}>Search</button>
-        </div>
-      </div>
+    <div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>
+      <TopBar />
+      <div style={styles.container}>
+        <h2 style={styles.title}>Client Registration Form</h2>
+        <form onSubmit={handleSubmit} style={styles.form}>
 
-      {/* Client Input Form */}
-      <div style={styles.formContainer}>
-        <form style={styles.form}>
           <label style={styles.label}>
-            Client Name:
-            <input type="text" placeholder="Enter client name" style={styles.input} required />
+            Client ID:
+            <input type="number" name="client_id" value={formData.client_id} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
-            Organization:
-            <input type="text" placeholder="Enter organization name" style={styles.input} required />
+            Organization ID:
+            <input type="text" name="organization" value={formData.organization} onChange={handleChange} style={styles.input} required />
+          </label>
+
+          <label style={styles.label}>
+            Name:
+            <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
             Phone:
-            <input type="tel" placeholder="Enter phone number" style={styles.input} required />
+            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
             Email:
-            <input type="email" placeholder="Enter email address" style={styles.input} required />
+            <input type="email" name="email" value={formData.email} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
             Address:
-            <input type="text" placeholder="Enter address" style={styles.input} required />
+            <input type="text" name="address" value={formData.address} onChange={handleChange} style={styles.input} required />
           </label>
 
-          <fieldset style={styles.fieldset}>
-            <legend style={styles.legend}>Status</legend>
-            <label style={styles.radioLabel}>
-              <input type="radio" name="status" value="active" defaultChecked /> Active
-            </label>
-            <label style={styles.radioLabel}>
-              <input type="radio" name="status" value="inactive" /> Inactive
-            </label>
-          </fieldset>
+          <label style={styles.label}>
+            Status:
+            <select name="status" value={formData.status} onChange={handleChange} style={styles.input} required>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </label>
 
-          <div style={styles.buttonContainer}>
-            <button type="button" style={styles.cancelButton}>Cancel</button>
-            <button type="submit" style={styles.saveButton}>Save</button>
-          </div>
+          <button type="submit" style={styles.button}>
+            Submit
+          </button>
         </form>
       </div>
-
-      {/* Footer */}
-      <div style={styles.footerContainer}>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    height: '110vh', // Reduced height to 90% of viewport height
-    width: '100vw', // Full width of the viewport
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between', // Space between nav, form, and footer
-    alignItems: 'center',
-    backgroundColor: '#4a626e', // Set to a darker background color
+    maxWidth: '600px',
+    margin: '2rem auto',
     padding: '20px',
-    boxSizing: 'border-box', // Include padding in height/width
-  },
-  navBar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: '20px',
-    borderBottom: '1px solid #ddd',
-    paddingBottom: '10px',
+    border: '1px solid #ddd',
+    borderRadius: '10px',
+    background: '#fdfdff',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    fontFamily: 'Arial, sans-serif',
   },
   title: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#fff', // Set title color to white
-  },
-  navButtons: {
-    display: 'flex',
-    gap: '10px',
-  },
-  navButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#fff', // Set button color to white
-    cursor: 'pointer',
-    fontSize: '16px',
-    textDecoration: 'underline',
-  },
-  searchButton: {
-    backgroundColor: '#008080',
-    color: 'white',
-    border: 'none',
-    padding: '5px 10px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
-  formContainer: {
-    width: '100%', // Ensure form takes full width
-    maxWidth: '600px', // Optional max width
-    flex: 1, // Allow form to grow and occupy available space
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center', // Center the form
-    alignItems: 'center',
+    textAlign: 'center',
+    color: '#333',
+    fontSize: '1.5rem',
+    marginBottom: '20px',
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr', // Two columns
     gap: '15px',
-    width: '100%', // Full width of the form container
   },
   label: {
+    color: '#333',
+    fontSize: '1rem',
     display: 'flex',
     flexDirection: 'column',
-    fontSize: '16px',
-    color: '#333',
   },
   input: {
-    padding: '8px',
-    fontSize: '16px',
-    borderRadius: '4px',
+    width: '100%',
+    padding: '10px',
+    fontSize: '1rem',
     border: '1px solid #ccc',
+    borderRadius: '5px',
+    outline: 'none',
     marginTop: '5px',
   },
-  fieldset: {
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    padding: '10px',
-  },
-  legend: {
-    fontSize: '16px',
-    color: '#333',
-  },
-  radioLabel: {
-    fontSize: '16px',
-    color: '#333',
-    marginRight: '20px',
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'center', // Center the buttons
-    gap: '10px',
-    marginTop: '15px',
-  },
-  cancelButton: {
-    backgroundColor: '#f44336',
-    color: 'white',
-    border: 'none',
-    padding: '10px 15px',
-    cursor: 'pointer',
-    borderRadius: '4px',
-    fontSize: '16px',
-  },
-  saveButton: {
+  button: {
+    gridColumn: '1 / -1', // Span across both columns
+    padding: '12px',
     backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
-    padding: '10px 15px',
+    borderRadius: '5px',
     cursor: 'pointer',
-    borderRadius: '4px',
-    fontSize: '16px',
-  },
-  footerContainer: {
-    display: 'flex',
-    justifyContent: 'center', // Center the footer
-    width: '100%', // Full width of the container
-    marginTop: '20px',
+    fontSize: '1rem',
+    transition: 'background-color 0.3s ease',
   },
 };
 
-export default ClientInput;
+export default ClientFormPage;
