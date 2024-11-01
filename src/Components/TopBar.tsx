@@ -15,6 +15,10 @@ const TopBar: React.FC = () => {
     navigate('/register');
   };
 
+  const handleEmployeeFormPage = () => {
+    navigate('/EmployeeFormPage');
+  };
+
   return (
    // <Box as="header" display="flex" justifyContent="space-between" alignItems="center" padding="1rem"  color="white">
       //{/* Increased font size to '2xl' and added custom font size */}
@@ -25,6 +29,9 @@ const TopBar: React.FC = () => {
         </Tooltip>
         <Tooltip content="Click here to Register">
           <Button  className='gets' marginRight="1rem" onClick={handleRegister}>Register</Button>
+        </Tooltip>
+        <Tooltip content="Click here to EmployeeFormPage">
+          <Button colorScheme="teal" marginRight="1rem" onClick={handleEmployeeFormPage}>EmployeeFormPage</Button>
         </Tooltip>
       </Box>
    // </Box>

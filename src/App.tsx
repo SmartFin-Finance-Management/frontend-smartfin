@@ -7,6 +7,7 @@ import RegisterPage from './Pages/RegisterPage';
 import { Provider } from './Components/ui/provider';
 import { ProjectFormPage } from './Pages/ProjectFormPage'
 import ClientInput from './Pages/ClientInput';
+import EmployeeFormPage from './Pages/EmployeeFormPage';
 
 import ClientManagement from './Pages/ClientManagement';
 import OrgDetails from './Pages/OrgDetails';
@@ -23,7 +24,13 @@ const App: React.FC = () => {
                     <Route path="/project" element={<ProjectFormPage />} />
                     <Route path="/clientInput" element={<ClientInput />} />
                     <Route path="/clientManagement" element={<ClientManagement/>} />
+<<<<<<< HEAD
                     <Route path="/orgdetails" element={<OrgDetails/>} />
+=======
+                    <Route path="/EmployeeFormPage" element={<EmployeeFormPage />} />
+                    <Route path="/OrgDetails" element={<OrgDetails />} />
+                    
+>>>>>>> 68b07d60c13df520a52f5c3ebf56ab053bac956d
                 </Routes>
             </Router>
         </Provider>
