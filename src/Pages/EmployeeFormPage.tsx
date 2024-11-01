@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TopBar from '../Components/TopBar';
+import Footer from '../Components/Footer';
 
 interface EmployeeFormProps {
   onSubmit: (data: IEmployeeForm) => void;
@@ -130,6 +131,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
         </button>
       </form>
     </div>
+    <Footer/>
     </div>
 
   );
@@ -153,13 +155,15 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '20px',
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr', // Two columns, adjust as needed
+    gap: '15px', // Spacing between grid items
   },
   label: {
-    marginBottom: '10px',
     color: '#333',
     fontSize: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
   },
   input: {
     width: '100%',
@@ -168,12 +172,11 @@ const styles: Record<string, React.CSSProperties> = {
     border: '1px solid #ccc',
     borderRadius: '5px',
     outline: 'none',
-    marginBottom: '15px',
+    marginTop: '5px',
   },
   button: {
-    width: '100%',
+    gridColumn: '1 / -1', // Span the button across both columns
     padding: '12px',
-    marginTop: '20px',
     backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
@@ -181,9 +184,6 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     fontSize: '1rem',
     transition: 'background-color 0.3s ease',
-  },
-  buttonHover: {
-    backgroundColor: '#45a049',
   },
 };
 
