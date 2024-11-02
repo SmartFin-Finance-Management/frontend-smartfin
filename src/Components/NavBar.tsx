@@ -36,6 +36,7 @@ const NavBar: React.FC = () => {
             </Float>
           </Avatar.Root>
         </Tooltip>
+        <Heading as="h1" fontSize="1.5rem">SmartFin</Heading>
       </Box>
 
       {/* Right section with navigation buttons */}
