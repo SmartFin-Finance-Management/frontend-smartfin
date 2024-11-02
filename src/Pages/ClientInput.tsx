@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import TopBar from '../Components/TopBar';
 import Footer from '../Components/Footer';
-
-interface ClientFormProps {
-  onSubmit: (data: IClientForm) => void;
-}
+import axios from 'axios';
 
 interface IClientForm {
-  client_id: number;
-  organization: string;
+  clientId: number; // This will now be automatically generated
+  orgId: number;
   name: string;
   phone: string;
   email: string;
@@ -16,16 +15,42 @@ interface IClientForm {
   status: string;
 }
 
-const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
+const ClientInput: React.FC = () => {
   const [formData, setFormData] = useState<IClientForm>({
-    client_id: 0,
-    organization: '',
+    clientId: 0, // Start with 0, will fetch from server
+    orgId: 0,
     name: '',
     phone: '',
     email: '',
     address: '',
     status: 'active',
   });
+
+  useEffect(() => {
+    const fetchOrgId = () => {
+      const orgId = Number(sessionStorage.getItem('org_id') || 0);
+      console.log('orgId: ', orgId);
+      setFormData((prev) => ({ ...prev, orgId }));
+    };
+
+    const fetchMaxClientId = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8008/clients/clientId/max`);
+        if (response.status === 200) {
+          // Update the client ID with the maximum client ID from the server
+          const maxClientId = response.data.max_client_id;
+          setFormData((prev) => ({ ...prev, clientId: maxClientId + 1 })); // Increment max clientId by 1 for new client
+        } else {
+          toast.error('Error fetching client ID. Please try again.');
+        }
+      } catch (error) {
+        toast.error('Error fetching client ID. Please try again.');
+      }
+    };
+
+    fetchOrgId();
+    fetchMaxClientId();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -35,9 +60,33 @@ const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    try {
+      const response = await axios.post(`http://localhost:8008/clients`, formData);
+      if (response.status === 200 || response.status === 201) {
+        const max = await axios.get(`http://localhost:8008/clients/clientId/max`);
+        toast.success('Client added successfully!'+max.data.max_client_id, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+
+        // Reset form data except orgId
+        setFormData({
+          clientId: 0, // Resetting clientId
+          orgId: formData.orgId,
+          name: '',
+          phone: '',
+          email: '',
+          address: '',
+          status: 'active',
+        });
+      } else {
+        throw new Error('Failed to add client');
+      }
+    } catch (error) {
+      toast.error('Error adding client. Please try again.');
+    }
   };
 
   return (
@@ -46,87 +95,29 @@ const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
       <div style={styles.container}>
         <h2 style={styles.title}>Client Registration Form</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
-
-          <label style={styles.label}>
-            Client ID:
-            <input 
-              type="number" 
-              name="client_id" 
-              value={formData.client_id} 
-              onChange={handleChange} 
-              style={styles.input} 
-              required 
-            />
-          </label>
-
-          <label style={styles.label}>
-            Organization ID:
-            <input 
-              type="text" 
-              name="organization" 
-              value={formData.organization} 
-              onChange={handleChange} 
-              style={styles.input} 
-              required 
-            />
-          </label>
-
           <label style={styles.label}>
             Name:
-            <input 
-              type="text" 
-              name="name" 
-              value={formData.name} 
-              onChange={handleChange} 
-              style={styles.input} 
-              required 
-            />
+            <input type="text" name="name" value={formData.name} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
             Phone:
-            <input 
-              type="tel" 
-              name="phone" 
-              value={formData.phone} 
-              onChange={handleChange} 
-              style={styles.input} 
-              required 
-            />
+            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
             Email:
-            <input 
-              type="email" 
-              name="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              style={styles.input} 
-              required 
-            />
+            <input type="email" name="email" value={formData.email} onChange={handleChange} style={styles.input} required />
           </label>
 
           <label style={styles.label}>
             Address:
-            <textarea 
-              name="address" 
-              value={formData.address} 
-              onChange={handleChange} 
-              style={styles.textarea} 
-              required 
-            />
+            <textarea name="address" value={formData.address} onChange={handleChange} style={styles.textarea} required />
           </label>
 
           <label style={styles.label}>
             Status:
-            <select 
-              name="status" 
-              value={formData.status} 
-              onChange={handleChange} 
-              style={styles.input} 
-              required
-            >
+            <select name="status" value={formData.status} onChange={handleChange} style={styles.input} required>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
@@ -138,6 +129,7 @@ const ClientInput: React.FC<ClientFormProps> = ({ onSubmit }) => {
         </form>
       </div>
       <Footer />
+      <ToastContainer style={{ top: '5%', left: '50%', transform: 'translateX(-50%)' }} />
     </div>
   );
 };
@@ -161,7 +153,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   form: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr', // Two columns
+    gridTemplateColumns: '1fr 1fr',
     gap: '15px',
   },
   label: {
@@ -187,11 +179,11 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: '5px',
     outline: 'none',
     marginTop: '5px',
-    resize: 'vertical', // Allow vertical resizing
-    minHeight: '100px', // Minimum height
+    resize: 'vertical',
+    minHeight: '100px',
   },
   button: {
-    gridColumn: '1 / -1', // Span across both columns
+    gridColumn: '1 / -1',
     padding: '12px',
     backgroundColor: '#4CAF50',
     color: 'white',
