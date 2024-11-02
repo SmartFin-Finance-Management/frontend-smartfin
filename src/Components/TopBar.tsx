@@ -19,6 +19,10 @@ const TopBar: React.FC = () => {
     navigate('/EmployeeFormPage');
   };
 
+  const handleProject = () => {
+    navigate('/project');
+  }
+
 
 
   return (
@@ -34,6 +38,9 @@ const TopBar: React.FC = () => {
       </Tooltip>
       <Tooltip content="Click here to EmployeeFormPage">
         <Button colorScheme="teal" marginRight="1rem" onClick={handleEmployeeFormPage}>EmployeeFormPage</Button>
+      </Tooltip>
+      <Tooltip content="Click here to ProjectDashBoard">
+        <Button colorScheme="teal" marginRight="1rem" onClick={handleProject}>ProjectDetailsPage</Button>
       </Tooltip>
     </Box>
     // </Box>
