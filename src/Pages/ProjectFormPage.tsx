@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface IProject {
     project_id: number;
@@ -87,9 +88,15 @@ export const ProjectFormPage: React.FC = () => {
                 actual_expenses: 0,
                 employees_list: [],
             });
+            toast.success(`Project successfully created! ID: ${project.project_id}`, {
+                position: 'top-right',
+                autoClose: 3000,
+            });
         }
-        catch (error) {
+        catch (error: any) {
             console.error("Error fetching projects:", error);
+            const errorMessage = error.response?.data?.message || 'Failed to create Project';
+            toast.error(errorMessage);
         }
     };
 
@@ -201,6 +208,7 @@ export const ProjectFormPage: React.FC = () => {
                     </button>
                 </form>
             </div>
+            <ToastContainer style={{ top: '5%', left: '50%', transform: 'translateX(-50%)' }} />
         </div>
     );
 };
