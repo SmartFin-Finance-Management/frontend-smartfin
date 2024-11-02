@@ -39,7 +39,7 @@ const NavBar: React.FC = () => {
             </Float>
           </Avatar.Root>
         </Tooltip>
-        <Heading as="h1" fontSize="1.5rem" onClick={handleHome} style={{ cursor: 'pointer' }}>SmartFin</Heading>
+        <Heading as="h1" margin="2.0 rem" fontSize="2.0 rem" onClick={handleHome} style={{ cursor: 'pointer' }}>SmartFin</Heading>
       </Box>
 
       {/* Right section with navigation buttons */}
