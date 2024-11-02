@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Box, Heading, Table, Text, Input, IconButton, Flex } from '@chakra-ui/react';
+import { FaSort, FaEdit, FaTrash } from 'react-icons/fa';
+import TopBar from '../Components/TopBar';
+import Footer from '../Components/Footer';
 
 interface Employee {
   employee_id: number;
@@ -20,6 +24,9 @@ interface Employee {
 
 const EmployeeDetailsPage: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Employee; direction: 'asc' | 'desc' } | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -29,7 +36,6 @@ const EmployeeDetailsPage: React.FC = () => {
       try {
         const response = await axios.get(url);
         
-        // Map response data and convert Decimal128 fields
         const convertedEmployees = response.data.map((employee: any) => ({
           ...employee,
           lpa: parseFloat(employee.lpa?.$numberDecimal || employee.lpa),
@@ -37,6 +43,7 @@ const EmployeeDetailsPage: React.FC = () => {
         }));
         
         setEmployees(convertedEmployees);
+        setFilteredEmployees(convertedEmployees);
       } catch (error) {
         console.error("Failed to fetch employee data:", error);
       }
@@ -45,72 +52,101 @@ const EmployeeDetailsPage: React.FC = () => {
     fetchEmployees();
   }, []);
 
-  return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Employee Details</h2>
-      <table style={styles.table}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Employee Type</th>
-            <th>Experience</th>
-            <th>LPA</th>
-            <th>Hourly Rate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((employee) => (
-            <tr key={employee.employee_id}>
-              <td>{employee.employee_id}</td>
-              <td>{employee.name}</td>
-              <td>{employee.email}</td>
-              <td>{employee.role}</td>
-              <td>{employee.employee_type}</td>
-              <td>{employee.experience}</td>
-              <td>{employee.lpa}</td>
-              <td>{employee.hourly_rate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+  const handleSort = (key: keyof Employee) => {
+    const direction = sortConfig?.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    maxWidth: '800px',
-    margin: '3rem auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '10px',
-    background: '#fdfdff',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    textAlign: 'center',
-    color: '#333',
-    fontSize: '1.5rem',
-    marginBottom: '20px',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-  },
-  th: {
-    borderBottom: '1px solid #ddd',
-    padding: '10px',
-    backgroundColor: '#f2f2f2',
-    textAlign: 'left',
-  },
-  td: {
-    borderBottom: '1px solid #ddd',
-    padding: '10px',
-    textAlign: 'left',
-  },
+    const sortedData = [...filteredEmployees].sort((a, b) => {
+      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    setFilteredEmployees(sortedData);
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    const filtered = employees.filter((employee) =>
+      Object.values(employee).some((val) =>
+        String(val).toLowerCase().includes(value)
+      )
+    );
+
+    setFilteredEmployees(filtered);
+  };
+
+  return (
+    <>
+      <TopBar />
+      <Box maxW="1300px" mx="auto" my="3rem" p="6" borderWidth="1px" borderRadius="lg" bg="gray.50" boxShadow="lg">
+        <Heading as="h2" size="lg" textAlign="center" color="gray.700" mb="6">
+          Employee Details
+        </Heading>
+        <Flex justifyContent="space-between" mb="4">
+          <Input
+            placeholder="Search employees..."
+            value={searchTerm}
+            onChange={handleSearch}
+            maxW="300px"
+          />
+        </Flex>
+        <Box overflowX="auto">
+          <Table.Root size={{ base: 'sm', md: 'md' }}>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader onClick={() => handleSort('employee_id')}>ID <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('name')}>Name <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('email')}>Email <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('role')}>Role <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('employee_type')}>Employee Type <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('experience')}>Experience <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('lpa')}>LPA <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader onClick={() => handleSort('hourly_rate')}>Hourly Rate <FaSort /></Table.ColumnHeader>
+                <Table.ColumnHeader>Actions</Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {filteredEmployees.map((employee) => (
+                <Table.Row key={employee.employee_id}>
+                  <Table.Cell>{employee.employee_id}</Table.Cell>
+                  <Table.Cell>{employee.name}</Table.Cell>
+                  <Table.Cell>
+                    <Text isTruncated maxW={{ base: "120px", md: "200px" }}>
+                      {employee.email}
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell>{employee.role}</Table.Cell>
+                  <Table.Cell>{employee.employee_type}</Table.Cell>
+                  <Table.Cell>{employee.experience}</Table.Cell>
+                  <Table.Cell>{employee.lpa}</Table.Cell>
+                  <Table.Cell>{employee.hourly_rate}</Table.Cell>
+                  <Table.Cell>
+                    <IconButton
+                      aria-label="Edit"
+                      icon={<FaEdit />}
+                      size="sm"
+                      mr="2"
+                      onClick={() => console.log(`Edit ${employee.employee_id}`)}
+                    />
+                    <IconButton
+                      aria-label="Delete"
+                      icon={<FaTrash />}
+                      size="sm"
+                      onClick={() => console.log(`Delete ${employee.employee_id}`)}
+                    />
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Box>
+      </Box>
+      <Footer />
+    </>
+  );
 };
 
 export default EmployeeDetailsPage;
