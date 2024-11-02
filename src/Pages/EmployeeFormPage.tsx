@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import TopBar from '../Components/TopBar';
 import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface EmployeeFormProps {
   onSubmit: (data: IEmployeeForm) => void;
@@ -54,17 +55,51 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // onSubmit(formData);
-    // Show success toast
-    console.log(formData.employee_id);
-    
-    toast.success('Employee successfully created!'+formData.employee_id, {
-      position: 'top-right', // Correct position string
-      autoClose: 3000, // Auto close after 3 seconds
-    });
-    
+  
+    const orgId = Number(sessionStorage.getItem("org_id") || 0);
+    const url = `http://localhost:5000/${orgId}/employees`;
+  
+    try {
+      const response = await axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      // Check if the response status is successful
+      if (response.status === 200 || response.status === 201) {
+        console.log(response.data); // Optional: Log response data for debugging
+        
+        toast.success(`Employee successfully created! ID: ${formData.employee_id}`, {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+  
+        // Optionally reset form or navigate on success
+        setFormData({
+          ...formData,
+          name: '',
+          email: '',
+          role: '',
+          employee_type: '',
+          experience: 0,
+          lpa: 0,
+          hourly_rate: 0,
+          project_id: 0,
+          project_history: [],
+          attendance: {},
+        });
+      } else {
+        throw new Error('Failed to create employee');
+      }
+    } catch (error: any) {
+      console.error('Error:', error);
+      // Use error.response to access the backend error message
+      const errorMessage = error.response?.data?.message || 'Failed to create employee';
+      toast.error(errorMessage);
+    }
   };
 
   const handleCancel = () => {
