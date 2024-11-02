@@ -23,6 +23,9 @@ const NavBar: React.FC = () => {
   const handleProfile = () => {
     navigate('/organaisation');
   };
+  const handleHome = () => {
+    navigate('/');
+  };
 
   return (
     <Box as="header" className="gets" display="flex" justifyContent="space-between" alignItems="center" padding="1rem" color="white">
@@ -30,13 +33,13 @@ const NavBar: React.FC = () => {
       {/* Left section with icon and title */}
       <Box display="flex" alignItems="center">
         <Tooltip content="Go to Profile Page" >
-          <Avatar.Root colorPalette="cyan" variant="subtle" onClick={handleProfile} style={{ cursor: 'pointer' }}>
+          <Avatar.Root colorPalette="cyan" variant="subtle" onClick={handleProfile} marginRight="1.5 rem"  style={{ cursor: 'pointer' }}>
             <Avatar.Fallback>SF</Avatar.Fallback>
             <Float placement="bottom-end" offsetX="1" offsetY="1">
             </Float>
           </Avatar.Root>
         </Tooltip>
-        <Heading as="h1" fontSize="1.5rem">SmartFin</Heading>
+        <Heading as="h1" fontSize="1.5rem" onClick={handleHome}>SmartFin</Heading>
       </Box>
 
       {/* Right section with navigation buttons */}
