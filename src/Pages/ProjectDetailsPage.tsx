@@ -27,6 +27,7 @@ interface IProject {
 export const ProjectDetailsPage: React.FC = () => {
     const [projectList, setProjectList] = useState<IProject[]>([]);
     const navigate = useNavigate();
+
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -37,28 +38,65 @@ export const ProjectDetailsPage: React.FC = () => {
             }
         };
         fetchProjects();
-    }, [])
+    }, []);
+
     return (
-        <div>
-            <div>
-                {projectList.length === 0 ? (
-                    <div>
-                        <button onClick={() => navigate('/project/form')}>Add New Project</button>
-                        <h3>There are no projects</h3>
-                    </div>
-                ) : (
-                    <div>
-                        <ul>
-                            {projectList.map((project) => (
-                                <li key={project.project_id}>
-                                    <ProjectCard project={project} />
-                                </li>
-                            ))}
-                        </ul>
-                        <button onClick={() => navigate('/project/form')}>Add New Project</button>
-                    </div>
-                )}
-            </div>
+        <div style={styles.pageContainer}>
+            {projectList.length === 0 ? (
+                <div style={styles.noProjectsContainer}>
+                    <button style={styles.button} onClick={() => navigate('/project/form')}>
+                        Add New Project
+                    </button>
+                    <h3>There are no projects</h3>
+                </div>
+            ) : (
+                <div style={styles.projectGridContainer}>
+                    {projectList.map((project) => (
+                        <div key={project.project_id} style={styles.projectGridItem}>
+                            <ProjectCard project={project} />
+                        </div>
+                    ))}
+                </div>
+            )}
+            <button style={styles.button} onClick={() => navigate("/project/form")}>
+                Add New Project
+            </button>
         </div>
     );
+};
+
+const styles: Record<string, React.CSSProperties> = {
+    pageContainer: {
+        padding: "2rem",
+        textAlign: "center",
+    },
+    noProjectsContainer: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    projectGridContainer: {
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)", // Ensures 4 columns per row
+        gap: "1.5rem",
+        padding: "1rem",
+    },
+    projectGridItem: {
+        display: "flex",
+        justifyContent: "center",
+    },
+    button: {
+        padding: "12px 24px",
+        fontSize: "1rem",
+        fontWeight: "bold",
+        color: "#ffffff",
+        backgroundColor: "#4CAF50",
+        border: "2px solid #4CAF50",
+        borderRadius: "5px",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease, border-color 0.3s ease",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        marginTop: "2rem",
+    },
 };
