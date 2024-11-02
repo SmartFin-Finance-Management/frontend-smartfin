@@ -3,15 +3,18 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
-.hel{
+.hel {
   font-family: 'Dancing Script', cursive;
-  font-weight: 400; /* optional, as Dancing Script has specific weights */
-  font-style: normal; /* optional, as it is the default style */
+  font-weight: 400;
+  /* optional, as Dancing Script has specific weights */
+  font-style: normal;
+  /* optional, as it is the default style */
 }
 
 /* Body Styling */
 body {
-  font-family: 'Roboto', serif; /* Switch to a professional font */
+  font-family: 'Roboto', serif;
+  /* Switch to a professional font */
   margin: 0;
   padding: 0;
   background-color: #62929e;
@@ -72,8 +75,10 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   text-align: center;
-  margin-top: -200px; /* Adjust the value as needed */
+  margin-top: -200px;
+  /* Adjust the value as needed */
 }
+
 .card-roots {
   width: 400px;
   background: #fff;
@@ -81,12 +86,15 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   text-align: center;
-  margin-top: -100px; /* Adjust the value as needed */
+  margin-top: -100px;
+  /* Adjust the value as needed */
 }
-.gets{
+
+.gets {
   background-color: #546a7b;
 }
-.sets{
+
+.sets {
   background-color: #000000;
 }
 
