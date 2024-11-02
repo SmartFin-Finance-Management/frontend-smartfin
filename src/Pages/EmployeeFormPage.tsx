@@ -60,13 +60,15 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
   
     const orgId = Number(sessionStorage.getItem("org_id") || 0);
     const url = `http://localhost:5000/${orgId}/employees`;
-  
+
+    console.log(formData);
+    
     try {
       const response = await axios.post(url, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
-      });
+    });
   
       // Check if the response status is successful
       if (response.status === 200 || response.status === 201) {
@@ -164,6 +166,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
           <label style={styles.label}>
             Employee Type:
             <select name="employee_type" value={formData.employee_type} onChange={handleChange} style={styles.input} required>
+              <option defaultChecked value="null">Select Employee Type</option>
               <option value="full">Full</option>
               <option value="part-time">Part-Time</option>
               <option value="contract">Contract</option>

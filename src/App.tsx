@@ -12,6 +12,7 @@ import EmployeeFormPage from './Pages/EmployeeFormPage';
 import ClientManagement from './Pages/ClientManagement';
 import OrgDetails from './Pages/OrgDetails';
 import { ProjectDetailsPage } from './Pages/ProjectDetailsPage';
+import EmployeeDetailsPage from './Pages/EmployeeDetailsPage';
 
 
 const App: React.FC = () => {
@@ -27,6 +28,7 @@ const App: React.FC = () => {
                     <Route path="/clientManagement" element={<ClientManagement />} />
                     <Route path="/orgdetails" element={<OrgDetails />} />
                     <Route path="/EmployeeFormPage" element={<EmployeeFormPage />} />
+                    <Route path="/EmployeeDetailsPage" element={<EmployeeDetailsPage />} />
                     <Route path="/project/form" element={<ProjectFormPage />} />
 
                 </Routes>
