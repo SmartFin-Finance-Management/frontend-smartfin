@@ -8,11 +8,11 @@ import { Provider } from './Components/ui/provider';
 import { ProjectFormPage } from './Pages/ProjectFormPage'
 import ClientInput from './Pages/ClientInput';
 import EmployeeFormPage from './Pages/EmployeeFormPage';
-
 import ClientManagement from './Pages/ClientManagement';
 import OrgDetails from './Pages/OrgDetails';
 import { ProjectDetailsPage } from './Pages/ProjectDetailsPage';
 import EmployeeDetailsPage from './Pages/EmployeeDetailsPage';
+import { ProjectPage } from './Pages/ProjectPage';
 
 
 const App: React.FC = () => {
@@ -30,6 +30,7 @@ const App: React.FC = () => {
                     <Route path="/EmployeeFormPage" element={<EmployeeFormPage />} />
                     <Route path="/EmployeeDetailsPage" element={<EmployeeDetailsPage />} />
                     <Route path="/project/form" element={<ProjectFormPage />} />
+                    <Route path="/project/:projectId" element={<ProjectPage />} />
 
                 </Routes>
             </Router>

@@ -64,7 +64,7 @@ export const ProjectFormPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
-            project.employees_list = [2];
+            project.employees_list = [1, 2, 3, 4];
             // onSubmit(project);
             await axios.post("http://localhost:4000/projects", project);
             // console.log([...projectList, project]);
