@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import TopBarLogin from '../Components/topbarlogin';
 import axios from 'axios';
+import NavBar from '../Components/NavBar';
 
 
 const LoginPage: React.FC = () => {
