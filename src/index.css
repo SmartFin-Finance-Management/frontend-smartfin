@@ -268,3 +268,45 @@ body {
 .button:hover {
   background-color: #e0a100;
 }
+
+/* employee */
+
+.icon-button {
+  color: white; /* or another contrasting color */
+}
+
+.icon-button:hover {
+  color: #f0f0f0; /* lighter color on hover */
+}
+
+.button {
+  margin-left: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0ad4e; /* or solid styles */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+  background-color: #e0a100; /* hover state */
+}
+
+.info-boxes {
+  display: flex;
+  justify-content: space-between; /* or space-around for more even spacing */
+  margin: 20px auto;
+  max-width: 900px;
+  flex-wrap: wrap; /* Allows wrapping of boxes on smaller screens */
+}
+
+@media (max-width: 768px) {
+  .card-root, .card-roots {
+    width: 90%; /* Adjust width on smaller screens */
+  }
+}
+
+
+/* employee */
