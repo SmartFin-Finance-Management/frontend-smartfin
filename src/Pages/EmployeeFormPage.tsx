@@ -5,6 +5,7 @@ import TopBar from '../Components/TopBar';
 import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NavBar from '../Components/NavBar';
 
 interface EmployeeFormProps {
   onSubmit: (data: IEmployeeForm) => void;
@@ -130,7 +131,8 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
 
   return (
     <div>
-      <TopBar />
+      {/* <TopBar /> */}
+      <NavBar />
       <div style={styles.container}>
         <h2 style={styles.title}>Employee Registration Form</h2>
         <form onSubmit={handleSubmit} style={styles.form}>

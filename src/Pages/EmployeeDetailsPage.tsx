@@ -16,6 +16,8 @@ import {
   DialogTrigger,
 } from "../Components/ui/dialog";
 import { Field } from "../Components/ui/field";
+import NavBar from '../Components/NavBar';
+import { useNavigate } from 'react-router-dom';
 
 
 interface Employee {
@@ -43,6 +45,7 @@ const EmployeeDetailsPage: React.FC = () => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
   const ref = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -169,11 +172,17 @@ const EmployeeDetailsPage: React.FC = () => {
 
   return (
     <>
-      <TopBar />
+      {/* <TopBar /> */}
+      <NavBar />
       <Box maxW="1300px" mx="auto" my="3rem" p="6" borderWidth="1px" borderRadius="lg" bg="gray.50" boxShadow="lg">
-        <Heading as="h1" fontSize="2xl" fontWeight="extrabold" textAlign="center" color="gray.700" mb="6">
+      <Flex justify="space-between" align="center" mb="6">
+        <Heading as="h1" fontSize="2xl" fontWeight="extrabold" color="gray.700">
           Employee Details
         </Heading>
+        <Button colorPalette='green' onClick={() => navigate('/EmployeeFormPage')}>
+          Add New Project
+        </Button>
+      </Flex>
         <Flex justifyContent="space-between" mb="4">
           <Input
             placeholder="Search employees..."
@@ -244,7 +253,7 @@ const EmployeeDetailsPage: React.FC = () => {
       
       {/* Edit Employee Dialog */}
       <DialogRoot open={isDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogTrigger as={Button}>Edit Employee</DialogTrigger>
+        {selectedEmployee && <DialogTrigger as={Button}>Edit Employee</DialogTrigger>}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Employee Details</DialogTitle>

@@ -17,7 +17,7 @@ const NavBar: React.FC = () => {
   };
 
   const handleEmployee = () => {
-    navigate('/EmployeeFormPage');
+    navigate('/EmployeeDetailsPage');
   };
 
   const handleProfile = () => {
