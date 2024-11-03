@@ -29,49 +29,49 @@ const NavBar: React.FC = () => {
 
 
 
-return (
-  <Box as="header" display="flex" justifyContent="space-between" alignItems="center" padding="1rem" bg="purple.800" color="white" boxShadow="md">
-    {/* Left Section with Avatar and Heading */}
-    <Box display="flex" alignItems="center">
-      <Tooltip content="Go to Profile Page" >
-        <Avatar.Root 
-          onClick={handleProfile} 
-          bg="cyan.500" 
-          color="white" 
-          cursor="pointer" 
-          size="md"
-          marginRight="1rem"
+  return (
+    <Box as="header" display="flex" justifyContent="space-between" alignItems="center" padding="1rem" bg="#546a7b" color="white" boxShadow="md">
+      {/* Left Section with Avatar and Heading */}
+      <Box display="flex" alignItems="center">
+        <Tooltip content="Go to Profile Page" >
+          <Avatar.Root
+            onClick={handleProfile}
+            bg="cyan.500"
+            color="white"
+            cursor="pointer"
+            size="md"
+            marginRight="1rem"
+          >
+            SF
+          </Avatar.Root>
+        </Tooltip>
+        <Heading
+          as="h1"
+          fontSize="2.5rem"
+          fontWeight="bold"
+          color="white"
+          onClick={handleHome}
+          cursor="pointer"
+          marginLeft="1rem"
         >
-          SF
-        </Avatar.Root>
-      </Tooltip>
-      <Heading 
-        as="h1" 
-        fontSize="2.5rem" 
-        fontWeight="bold" 
-        color="yellow.300" 
-        onClick={handleHome} 
-        cursor="pointer"
-        marginLeft="1rem"
-      >
-        SmartFin
-      </Heading>
-    </Box>
+          SmartFin
+        </Heading>
+      </Box>
 
-    {/* Right Section with Navigation Buttons */}
-    <Box display="flex" alignItems="center">
-      <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleEmployee}>
-        Employee
-      </Button>
-      <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleProject}>
-        Project
-      </Button>
-      <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleClient}>
-        Client
-      </Button>
+      {/* Right Section with Navigation Buttons */}
+      <Box display="flex" alignItems="center">
+        <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleEmployee}>
+          Employee
+        </Button>
+        <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleProject}>
+          Project
+        </Button>
+        <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleClient}>
+          Client
+        </Button>
+      </Box>
     </Box>
-  </Box>
-);
+  );
 };
 
 export default NavBar;
