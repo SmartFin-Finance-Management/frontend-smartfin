@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import TopBar from '../Components/TopBar';
 import Footer from '../Components/Footer';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import NavBar from '../Components/NavBar';
 
 interface IClientForm {
   clientId: number; // This will now be automatically generated
@@ -41,7 +43,7 @@ const ClientInput: React.FC = () => {
           const maxClientId = response.data.max_client_id;
           setFormData((prev) => ({ ...prev, clientId: maxClientId + 1 })); // Increment max clientId by 1 for new client
         } else {
-          toast.error('Error fetching client ID. Please try again.');
+          toast.error('Error fetching client ID. Please try again.'+response.data.clientId);
         }
       } catch (error) {
         toast.error('Error fetching client ID. Please try again.');
@@ -59,21 +61,20 @@ const ClientInput: React.FC = () => {
       [name]: value,
     });
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post(`http://localhost:8008/clients`, formData);
       if (response.status === 200 || response.status === 201) {
-        const max = await axios.get(`http://localhost:8008/clients/clientId/max`);
-        toast.success('Client added successfully!'+max.data.max_client_id, {
+        toast.success('Client added successfully!'+formData.clientId, {
           position: 'top-right',
           autoClose: 3000,
         });
 
         // Reset form data except orgId
         setFormData({
-          clientId: 0, // Resetting clientId
+          clientId: formData.clientId+1,
           orgId: formData.orgId,
           name: '',
           phone: '',
@@ -81,17 +82,18 @@ const ClientInput: React.FC = () => {
           address: '',
           status: 'active',
         });
+        navigate('/clientManagement');
       } else {
         throw new Error('Failed to add client');
       }
     } catch (error) {
-      toast.error('Error adding client. Please try again.');
+      toast.error('Error adding client. Please try again.'+formData.clientId+error.message);
     }
   };
 
   return (
     <div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>
-      <TopBar />
+      <NavBar />
       <div style={styles.container}>
         <h2 style={styles.title}>Client Registration Form</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
