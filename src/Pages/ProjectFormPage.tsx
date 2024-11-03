@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
+import { useParams } from "react-router-dom";
 
 interface IProject {
     project_id: number;
@@ -48,6 +49,19 @@ export const ProjectFormPage: React.FC = () => {
         employees_list: [],
     });
 
+    const { projectId } = useParams<{ projectId: string }>();
+
+    useEffect(() => {
+        const update = async () => {
+            if (projectId) {
+                const { data } = await axios.get(`http://localhost:4000/projects/${projectId}`);
+                setFormData(data);
+            }
+        };
+        update();
+    }, [projectId]);
+
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -60,6 +74,8 @@ export const ProjectFormPage: React.FC = () => {
                 name === 'additional_expenses' || name === 'actual_expenses' ? Number(value) : value
         }));
     };
+
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         try {

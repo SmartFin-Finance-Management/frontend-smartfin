@@ -108,7 +108,7 @@ export const ProjectPage: React.FC = () => {
                         {employees.map((employee) => (
                             <div key={employee.id} style={styles.employeeIdBox}>
                                 <img
-                                    src={`manager.png`} // Adjust the path as necessary
+                                    src={"/manager.png"} // Adjust the path as necessary
                                     alt={employee.name}
                                     style={styles.employeeImage}
                                 />
