@@ -68,20 +68,19 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-    });
+      });
   
-      // Check if the response status is successful
       if (response.status === 200 || response.status === 201) {
-        console.log(response.data); // Optional: Log response data for debugging
+        console.log(response.data);
         
         toast.success(`Employee successfully created! ID: ${formData.employee_id}`, {
           position: 'top-right',
           autoClose: 3000,
         });
   
-        // Optionally reset form or navigate on success
         setFormData({
           ...formData,
+          employee_id: formData.employee_id+1,
           name: '',
           email: '',
           role: '',
@@ -98,7 +97,6 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
       }
     } catch (error: any) {
       console.error('Error:', error);
-      // Use error.response to access the backend error message
       const errorMessage = error.response?.data?.message || 'Failed to create employee';
       toast.error(errorMessage);
     }
@@ -119,16 +117,16 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
         const data = await response.json();
         setFormData(prev => ({
           ...prev,
-          employee_id: data.max_employee_id + 1, // Set employee_id to max_employee_id + 1
+          employee_id: data.max_employee_id + 1,
         }));
       } catch (error) {
         console.error('Failed to fetch unique employee ID:', error);
-        toast.error('Failed to fetch unique employee ID.'); // Show error toast
+        toast.error('Failed to fetch unique employee ID.');
       }
     };
 
     fetchEmployeeId();
-  }, []); // Empty dependency array to run only on mount
+  }, []);
 
   return (
     <div>
@@ -136,7 +134,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
       <div style={styles.container}>
         <h2 style={styles.title}>Employee Registration Form</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
-
+        
         {/* <label style={styles.label}>
           Employee ID:
           <input type="number" name="employee_id" value={formData.employee_id} onChange={handleChange} style={styles.input} required />
@@ -179,15 +177,15 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
             <input type="number" name="experience" value={formData.experience} onChange={handleChange} style={styles.input} required />
           </label>
 
-          {/* <label style={styles.label}>
-            LPA:
-            <input type="number" name="lpa" value={formData.lpa} onChange={handleChange} style={styles.input} required />
-          </label> */}
-
           <label style={styles.label}>
             Hourly Rate:
             <input type="number" name="hourly_rate" value={formData.hourly_rate} onChange={handleChange} style={styles.input} required />
           </label>
+
+          {/* <label style={styles.label}>
+            LPA:
+            <input type="number" name="lpa" value={formData.lpa} onChange={handleChange} style={styles.input} required />
+          </label> */}
 
           <label style={styles.label}>
             Client ID:
@@ -199,7 +197,6 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
             <input type="number" name="project_id" value={formData.project_id} onChange={handleChange} style={styles.input} required />
           </label>
 
-          {/* Hidden Project Manager ID field */}
           <input type="hidden" name="project_manager_id" value={formData.project_manager_id} onChange={handleChange} />
 
           <div style={styles.buttonContainer}>
@@ -256,13 +253,13 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: '5px',
   },
   buttonContainer: {
-    gridColumn: '1 / -1', // Span the container across both columns
+    gridColumn: '1 / -1',
     display: 'flex',
-    gap: '15px', // Space between buttons
+    gap: '15px',
     marginTop: '15px',
   },
   submitButton: {
-    flex: 1, // Expand equally with the cancel button
+    flex: 1,
     padding: '12px',
     backgroundColor: '#4CAF50',
     color: 'white',
@@ -273,7 +270,7 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'background-color 0.3s ease',
   },
   cancelButton: {
-    flex: 1, // Expand equally with the submit button
+    flex: 1,
     padding: '12px',
     backgroundColor: '#f44336',
     color: 'white',
@@ -284,7 +281,5 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'background-color 0.3s ease',
   },
 };
-
-
 
 export default EmployeeFormPage;
