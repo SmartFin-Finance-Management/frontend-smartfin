@@ -45,7 +45,7 @@ export const ProjectDetailsPage: React.FC = () => {
     // Handler for viewing a project
     const handleView = (projectId: number) => {
         console.log("Viewing project with ID:", projectId);
-        navigate(`/projects/${projectId}`);
+        navigate(`/project/${projectId}`);
     };
 
     // Handler for updating a project
