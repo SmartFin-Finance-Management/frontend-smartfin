@@ -3,7 +3,6 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
-import { useParams } from "react-router-dom";
 
 interface IProject {
     project_id: number;
@@ -25,7 +24,6 @@ interface IProject {
     actual_expenses: number;
     employees_list: number[];
 }
-
 
 export const ProjectFormPage: React.FC = () => {
     const [project, setFormData] = useState<IProject>({
@@ -49,24 +47,11 @@ export const ProjectFormPage: React.FC = () => {
         employees_list: [],
     });
 
-    const { projectId } = useParams<{ projectId: string }>();
-
-    useEffect(() => {
-        const update = async () => {
-            if (projectId) {
-                const { data } = await axios.get(`http://localhost:4000/projects/${projectId}`);
-                setFormData(data);
-            }
-        };
-        update();
-    }, [projectId]);
-
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: name === 'project_id' || name === 'org_id' || name === 'client_id' ||
+            [name]: name === 'client_id' ||
                 name === 'total_budget' || name === 'allocated_budget' ||
                 name === 'remaining_budget' || name === 'employee_budget' ||
                 name === 'technical_budget' || name === 'additional_budget' ||
@@ -75,17 +60,39 @@ export const ProjectFormPage: React.FC = () => {
         }));
     };
 
+    useEffect(() => {
+        const fetchProjectId = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/projects/getUniqueId');
 
+                if (response.status !== 200) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = response.data;
+                //console.log(data);
+
+                setFormData(prev => ({
+                    ...prev,
+                    project_id: data.max_project_id + 1,
+                }));
+            } catch (error) {
+                console.error('Failed to fetch unique project ID:', error);
+                toast.error('Failed to fetch unique project ID.');
+            }
+        };
+
+        fetchProjectId();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        project.employees_list = [1, 2, 3, 4]; // Example employee IDs
+        const orgId = Number(sessionStorage.getItem("org_id") || 0);
+        const url = `http://localhost:5000/${orgId}/projects`;
+
         try {
-            e.preventDefault();
-            project.employees_list = [1, 2, 3, 4];
-            // onSubmit(project);
-            await axios.post("http://localhost:4000/projects", project);
-            // console.log([...projectList, project]);
-            //onSubmit(formData); // Pass the form data to the parent component
-            // Reset form after submission
+            await axios.post(url, project);
             setFormData({
                 project_id: 0,
                 org_id: 0,
@@ -110,8 +117,7 @@ export const ProjectFormPage: React.FC = () => {
                 position: 'top-right',
                 autoClose: 3000,
             });
-        }
-        catch (error: any) {
+        } catch (error: any) {
             console.error("Error fetching projects:", error);
             const errorMessage = error.response?.data?.message || 'Failed to create Project';
             toast.error(errorMessage);
@@ -127,16 +133,6 @@ export const ProjectFormPage: React.FC = () => {
                         <h2 style={styles.title}>Project Information</h2>
                     </div>
                     <form onSubmit={handleSubmit} style={styles.form}>
-                        <label style={styles.label}>
-                            Project ID:
-                            <input type="number" name="project_id" value={project.project_id} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Organization ID:
-                            <input type="number" name="org_id" value={project.org_id} onChange={handleChange} style={styles.input} required />
-                        </label>
-
                         <label style={styles.label}>
                             Client ID:
                             <input type="number" name="client_id" value={project.client_id} onChange={handleChange} style={styles.input} required />
@@ -260,33 +256,37 @@ const styles: Record<string, React.CSSProperties> = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        textAlign: 'center',
     },
     title: {
-        color: '#333',
         fontSize: '2rem',
+        color: '#333',
+        textAlign: 'center',
     },
     form: {
-        flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        flex: 2,
     },
     label: {
         marginBottom: '10px',
     },
     input: {
         padding: '8px',
-        margin: '5px 0',
-        border: '1px solid #ccc',
         borderRadius: '4px',
+        border: '1px solid #ccc',
+        marginTop: '4px',
         width: '100%',
     },
     button: {
         padding: '10px',
-        backgroundColor: '#4CAF50',
-        color: 'white',
+        background: '#007bff',
+        color: '#fff',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-    },
+        fontSize: '16px',
+        transition: 'background-color 0.3s',
+    }
 };
+
+export default ProjectFormPage;
