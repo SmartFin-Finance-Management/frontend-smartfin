@@ -69,32 +69,57 @@ const OrganizationTable: React.FC = () => {
         return <div>{error}</div>;
     }
 
+    const tableStyle = {
+        width: '100%',
+        borderCollapse: 'collapse',
+        marginBottom: '20px',
+    };
+
+    const thStyle = {
+        backgroundColor: '#f2f2f2',
+        border: '1px solid #ddd',
+        padding: '8px',
+    };
+
+    const tdStyle = {
+        border: '1px solid #ddd',
+        padding: '8px',
+    };
+
+    const buttonStyle = {
+        backgroundColor: '#f44336',
+        color: 'white',
+        border: 'none',
+        padding: '5px 10px',
+        cursor: 'pointer',
+    };
+
     return (
         <div>
             <h1>Organizations</h1>
-            <table>
+            <table style={tableStyle}>
                 <thead>
                     <tr>
-                        <th>Org ID</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Address</th>
-                        <th>Contact Info</th>
-                        <th>No. of Employees</th>
-                        <th>Actions</th>
+                        <th style={thStyle}>Org ID</th>
+                        <th style={thStyle}>Name</th>
+                        <th style={thStyle}>Type</th>
+                        <th style={thStyle}>Address</th>
+                        <th style={thStyle}>Contact Info</th>
+                        <th style={thStyle}>No. of Employees</th>
+                        <th style={thStyle}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {organizations.map((org) => (
                         <tr key={org.org_id}>
-                            <td>{org.org_id}</td>
-                            <td>{org.name}</td>
-                            <td>{org.type}</td>
-                            <td>{org.address}</td>
-                            <td>{org.contact_info}</td>
-                            <td>{org.numberOfEmployees}</td>
-                            <td>
-                                <button onClick={() => handleDelete(org.org_id)}>Delete</button>
+                            <td style={tdStyle}>{org.org_id}</td>
+                            <td style={tdStyle}>{org.name}</td>
+                            <td style={tdStyle}>{org.type}</td>
+                            <td style={tdStyle}>{org.address}</td>
+                            <td style={tdStyle}>{org.contact_info}</td>
+                            <td style={tdStyle}>{org.numberOfEmployees}</td>
+                            <td style={tdStyle}>
+                                <button style={buttonStyle} onClick={() => handleDelete(org.org_id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
