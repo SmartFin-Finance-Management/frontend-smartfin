@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { ProjectCard } from "../Components/ProjectCard";
-import axios from 'axios';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import Footer from "../Components/Footer";
+import {
+    DialogRoot,
+    DialogTrigger,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogBody,
+    DialogFooter,
+} from "../Components/ui/dialog";
+import { Button, Input, Stack } from "@chakra-ui/react";
 
 interface IProject {
     project_id: number;
@@ -28,6 +38,8 @@ interface IProject {
 
 export const ProjectDetailsPage: React.FC = () => {
     const [projectList, setProjectList] = useState<IProject[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,16 +54,44 @@ export const ProjectDetailsPage: React.FC = () => {
         fetchProjects();
     }, []);
 
-    // Handler for viewing a project
     const handleView = (projectId: number) => {
-        console.log("Viewing project with ID:", projectId);
         navigate(`/project/${projectId}`);
     };
 
-    // Handler for updating a project
     const handleUpdate = (projectId: number) => {
-        console.log("Updating project with ID:", projectId);
-        navigate(`/projects/update/${projectId}`);
+        const project = projectList.find((p) => p.project_id === projectId);
+        if (project) {
+            setSelectedProject(project);
+            setIsDialogOpen(true);
+        }
+    };
+
+    const handleSaveChanges = async () => {
+        if (selectedProject) {
+            try {
+                const response = await axios.put(
+                    `http://localhost:4000/projects/${selectedProject.project_id}`,
+                    selectedProject
+                );
+
+                // Update the projectList in the local state
+                setProjectList((prev) =>
+                    prev.map((project) =>
+                        project.project_id === selectedProject.project_id
+                            ? response.data
+                            : project
+                    )
+                );
+                setIsDialogOpen(false);
+            } catch (error) {
+                console.error("Error updating project:", error);
+            }
+        }
+    };
+
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
+        setSelectedProject(null);
     };
 
     return (
@@ -59,7 +99,7 @@ export const ProjectDetailsPage: React.FC = () => {
             <NavBar />
             <div style={styles.pageContainer}>
                 <div style={styles.buttonContainer}>
-                    <button style={styles.button} onClick={() => navigate('/project/form')}>
+                    <button style={styles.button} onClick={() => navigate("/project/form")}>
                         Add New Project
                     </button>
                 </div>
@@ -71,16 +111,89 @@ export const ProjectDetailsPage: React.FC = () => {
                     <div style={styles.projectGridContainer}>
                         {projectList.map((project) => (
                             <div key={project.project_id} style={styles.projectGridItem}>
-                                <ProjectCard
-                                    project={project}
-                                    onView={handleView}
-                                    onUpdate={handleUpdate}
-                                />
+                                <ProjectCard project={project} onView={handleView} onUpdate={() => handleUpdate(project.project_id)} />
                             </div>
                         ))}
                     </div>
                 )}
             </div>
+            {selectedProject && (
+                <DialogRoot open={isDialogOpen} onOpenChange={handleCloseDialog}>
+                    <DialogTrigger asChild>
+                        <Button>Edit Project</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Edit Project Details</DialogTitle>
+                        </DialogHeader>
+                        <DialogBody pb="4">
+                            <Stack spacing={4}>
+                                <label>Project Name</label>
+                                <Input
+                                    placeholder="Project Name"
+                                    value={selectedProject.project_name}
+                                    onChange={(e) =>
+                                        setSelectedProject({ ...selectedProject, project_name: e.target.value })
+                                    }
+                                />
+                                <label>Start Date</label>
+                                <Input
+                                    type="date"
+                                    value={selectedProject.start_date}
+                                    onChange={(e) =>
+                                        setSelectedProject({ ...selectedProject, start_date: e.target.value })
+                                    }
+                                />
+                                <label>End Date</label>
+                                <Input
+                                    type="date"
+                                    value={selectedProject.end_date}
+                                    onChange={(e) =>
+                                        setSelectedProject({ ...selectedProject, end_date: e.target.value })
+                                    }
+                                />
+                                <label>Status</label>
+                                <select
+                                    value={selectedProject.status}
+                                    onChange={(e) =>
+                                        setSelectedProject({ ...selectedProject, status: e.target.value })
+                                    }
+                                    required
+                                >
+                                    <option value="" disabled>Select Status</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="upcoming">Upcoming</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                                {["total_budget", "allocated_budget", "remaining_budget", "employee_budget", "technical_budget", "additional_budget", "employee_expenses", "technical_expenses", "additional_expenses", "actual_expenses"].map((field) => (
+                                    <div key={field}>
+                                        <label>{field.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
+                                        <Input
+                                            type="number"
+                                            placeholder={field.replace('_', ' ')}
+                                            value={selectedProject[field as keyof IProject]}
+                                            onChange={(e) =>
+                                                setSelectedProject({
+                                                    ...selectedProject,
+                                                    [field]: Number(e.target.value),
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                ))}
+                            </Stack>
+                        </DialogBody>
+                        <DialogFooter>
+                            <Button colorScheme="blue" onClick={handleSaveChanges}>
+                                Save Changes
+                            </Button>
+                            <Button variant="ghost" onClick={handleCloseDialog}>
+                                Cancel
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </DialogRoot>
+            )}
             <Footer />
         </div>
     );
@@ -111,7 +224,7 @@ const styles: Record<string, React.CSSProperties> = {
     },
     projectGridContainer: {
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", // Responsive grid
+        gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
         gap: "1.5rem",
         padding: "1rem",
     },
