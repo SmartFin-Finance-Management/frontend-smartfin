@@ -36,15 +36,12 @@ const App: React.FC = () => {
                     <Route path="/EmployeeDetailsPage" element={<EmployeeDetailsPage />} />
                     <Route path="/project/form" element={<ProjectFormPage />} />
                     <Route path="/project/:projectId" element={<ProjectPage />} />
-<<<<<<< HEAD
 
-=======
                     <Route path="/projects/update/:projectId" element={<ProjectFormPage />} />
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
-                    <Route path="/client/edit/:clientId" element={<EditClientForm/>} />
+                    <Route path="/client/edit/:clientId" element={<EditClientForm />} />
                     <Route path="/client/:clientId" element={<ClientInfo />} />
                     <Route path="/profile" element={<Profile />} />
->>>>>>> bbe1ef6dafc9557c57c8368c12b549ee744cab7e
                 </Routes>
             </Router>
         </Provider>
