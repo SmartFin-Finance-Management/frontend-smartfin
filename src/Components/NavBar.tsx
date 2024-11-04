@@ -21,7 +21,7 @@ const NavBar: React.FC = () => {
   };
 
   const handleProfile = () => {
-    navigate('/organaisation');
+    navigate('/DashboardPage');
   };
   const handleHome = () => {
     navigate('/');
