@@ -75,8 +75,10 @@ const Profile: React.FC = () => {
     }
 
     return (
+        <div>
+        <NavBar />
         <div style={styles.orgDetailsContainer}>
-            <NavBar />
+            
             <h1 style={styles.heading1}>Organization Details</h1>
             <h2 style={styles.heading2}>{orgData.name}</h2>
             <p style={styles.paragraph}><strong>Organization ID:</strong> {orgData.org_id}</p>
@@ -92,6 +94,7 @@ const Profile: React.FC = () => {
                     Sign Out
                 </button>
             </div>
+        </div>
         </div>
     );
 };
