@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Button, IconButton, Avatar, Float, Circle } from '@chakra-ui/react';
 import { Tooltip } from "../Components/ui/tooltip";
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export interface User {
   org_id: number;
@@ -19,16 +20,11 @@ const NavBar: React.FC = () => {
     const fetchEmployeeId = async () => {
       try {
         const email = sessionStorage.getItem('email') || 0;
-        const response = await fetch(`http://localhost:9000/get/${email}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const response = await axios.get<User>(`http://localhost:9000/get/${email}`);
+        if (response.status !== 200) {
+          throw new Error('No user found');
         }
-        setRole(response)
-        // const data = await response.json();
-        // setFormData(prev => ({
-        //   ...prev,
-        //   employee_id: data.max_employee_id + 1,
-        // }));
+        setRole(response.data.role)
       } catch (error) {
         console.error('Failed to fetch unique employee ID:', error);
         toast.error('Failed to fetch unique employee ID.');
@@ -56,7 +52,7 @@ const NavBar: React.FC = () => {
     navigate('/profile');
   };
   const handleUser = () => {
-    navigate('/home');
+    navigate('/userManagement');
   };
   const handleHome = () => {
     navigate('/home');
@@ -107,9 +103,9 @@ const NavBar: React.FC = () => {
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleClient}>
           Client
         </Button>
-        <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleUser}>
-          Client
-        </Button>
+        { (Role === 'admin' || Role === 'sa') && <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleUser}>
+          User
+        </Button>}
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleSignOut}>
           SignOut
         </Button>

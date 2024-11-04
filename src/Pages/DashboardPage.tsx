@@ -6,6 +6,7 @@ import { Chart, LinearScale, CategoryScale, BarElement, Title, Tooltip, Legend }
 import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
 import dayjs from 'dayjs'; // Import dayjs for date manipulation
+import FinanceForm from './FinanceForm';
 
 export interface Organisation {
   org_id: number;
@@ -300,7 +301,9 @@ const DashboardPage = () => {
               View Financial Reports
             </Button>
           </GridItem>
+        <FinanceForm />
         </Grid>
+
       </Box>
       <Footer />
     </>
