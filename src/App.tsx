@@ -44,6 +44,7 @@ const App: React.FC = () => {
                     <Route path="/userInput" element={<UserInput />} />
                     <Route path="/userManagement" element={<UserManagement />} />
                     <Route path="/profile" element={<Profile />} />
+                    
                 </Routes>
             </Router>
         </Provider>
