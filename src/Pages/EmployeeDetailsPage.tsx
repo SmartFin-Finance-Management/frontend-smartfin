@@ -180,7 +180,7 @@ const EmployeeDetailsPage: React.FC = () => {
           Employee Details
         </Heading>
         <Button colorPalette='green' onClick={() => navigate('/EmployeeFormPage')}>
-          Add New Project
+          Add New Employee
         </Button>
       </Flex>
         <Flex justifyContent="space-between" mb="4">

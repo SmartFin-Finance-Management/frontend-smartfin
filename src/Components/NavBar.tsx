@@ -21,10 +21,10 @@ const NavBar: React.FC = () => {
   };
 
   const handleProfile = () => {
-    navigate('/organaisation');
+    navigate('/profile');
   };
   const handleHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
 
