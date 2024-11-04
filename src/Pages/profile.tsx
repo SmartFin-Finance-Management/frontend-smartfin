@@ -20,7 +20,7 @@ const Profile: React.FC = () => {
 
     useEffect(() => {
         const fetchOrgData = async () => {
-            const orgId = sessionStorage.getItem('orgId');
+            const orgId = sessionStorage.getItem('org_id');
             if (!orgId) {
                 setError('No organization ID found in session storage.');
                 setLoading(false);
@@ -28,7 +28,7 @@ const Profile: React.FC = () => {
             }
 
             try {
-                const response = await axios.get<Organisation>(`http://localhost:5000/api/organizations/${orgId}`);
+                const response = await axios.get<Organisation>(`http://localhost:5000/Org/${orgId}`);
                 setOrgData(response.data); // TypeScript knows that response.data is an Organisation
             } catch (err) {
                 setError('Error fetching organization details. Please try again.');
@@ -41,14 +41,14 @@ const Profile: React.FC = () => {
     }, []);
 
     const handleDelete = async () => {
-        const orgId = sessionStorage.getItem('orgId');
+        const orgId = sessionStorage.getItem('org_id');
         if (!orgId) {
             setError('No organization ID found in session storage.');
             return;
         }
 
         try {
-            await axios.delete(`http://localhost:5000/api/organizations/${orgId}`);
+            await axios.delete(`http://localhost:5000/Org/${orgId}`);
             sessionStorage.clear();
             navigate('/login'); // Use navigate instead of history.push
         } catch (err) {
