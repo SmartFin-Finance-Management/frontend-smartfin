@@ -34,13 +34,15 @@ const LoginPage: React.FC = () => {
 
       // Assuming the response contains a token
       const token = response.data.token; // Adjust based on your API response structure
+      const org_id = response.data.org_id; // Adjust based on your API response
 
       // Save the token to session storage
       sessionStorage.setItem('authToken', token);
-      
+      sessionStorage.setItem('org_id', org_id);
+      sessionStorage.setItem('email', email);
 
       // Navigate to the home page or wherever appropriate
-      navigate('/thome');
+      navigate('/home');
     } catch (error) {
       console.error('Login failed:', error);
       // Optionally handle errors, such as showing a notification or an error message
