@@ -120,17 +120,17 @@ const DashboardPage = () => {
       }
     };
 
-    const fetchProjects = async () => {
-      try {
-        const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get(`http://localhost:5000/${orgId}/projects`);
-        setProjects(response.data);
-      } catch (err) {
-        console.error('Error fetching projects:', err);
-      }
-    };
+    // const fetchProjects = async () => {
+    //   try {
+    //     const orgId = sessionStorage.getItem('org_id');
+    //     const response = await axios.get(`http://localhost:5000/${orgId}/projects`);
+    //     setProjects(response.data);
+    //   } catch (err) {
+    //     console.error('Error fetching projects:', err);
+    //   }
+    // };
 
-    fetchProjects();
+    // fetchProjects();
     
 
     fetchOrganization();
