@@ -20,6 +20,7 @@ import EditClientForm from './Pages/clientEditForm';
 import UserInput from './Pages/UserInput';
 import UserManagement from './Pages/userManagement';
 import Profile from './Pages/profile';
+import SaloginPage from './Pages/Salogin';
 
 const App: React.FC = () => {
     return (
@@ -46,6 +47,7 @@ const App: React.FC = () => {
                     <Route path="/userInput" element={<UserInput />} />
                     <Route path="/userManagement" element={<UserManagement />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/saLogin" element={<SaloginPage />} />
                 </Routes>
             </Router>
         </Provider>
