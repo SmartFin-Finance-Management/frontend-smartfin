@@ -18,6 +18,8 @@ import ClientInfo from './Pages/clientDetails';
 import UserInput from './Pages/UserInput';
 import UserManagement from './Pages/userManagement';
 import Profile from './Pages/profile';
+import SaloginPage from './Pages/Salogin';
+import OrganizationTable from './Pages/adminDashboard';
 
 const App: React.FC = () => {
     return (
@@ -39,11 +41,15 @@ const App: React.FC = () => {
 
                     <Route path="/projects/update/:projectId" element={<ProjectFormPage />} />
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
-                   
+                    <Route path="/client/edit/:clientId" element={<EditClientForm />} />
+
                     <Route path="/client/:clientId" element={<ClientInfo />} />
                     <Route path="/userInput" element={<UserInput />} />
                     <Route path="/userManagement" element={<UserManagement />} />
                     <Route path="/profile" element={<Profile />} />
+
+                    <Route path="/saLogin" element={<SaloginPage />} />
+                    <Route path="/saHome" element={<OrganizationTable />} />
                 </Routes>
             </Router>
         </Provider>

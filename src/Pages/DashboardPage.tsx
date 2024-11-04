@@ -217,7 +217,7 @@ const DashboardPage = () => {
         <Grid templateColumns="repeat(3, 1fr)" gap={6} mb={6}>
           {/* General Stats */}
           <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
-            <Heading size="md" mb={4} color="teal.500">General Stats</Heading>
+            <Heading size="xl" mb={4} color="teal.500">General Stats</Heading>
             <VStack spacing={4} align="stretch">
               <HStack justify="space-between" borderBottom="1px solid" borderColor="gray.200" pb={2}>
                 <Text>Total Employees</Text>
@@ -235,8 +235,8 @@ const DashboardPage = () => {
           </GridItem>
 
           {/* Budget Summary */}
-          <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
-            <Heading size="md" mb={4} color="teal.500">Budget Summary</Heading>
+          <GridItem colSpan={{ base: 3, md: 2 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
+            <Heading size="xl" mb={4} color="teal.500">Budget Summary</Heading>
             
             <Flex justifyContent="space-between" alignItems="center">
               {/* Budget Text Summary */}
@@ -256,20 +256,24 @@ const DashboardPage = () => {
               </VStack>
 
               {/* Doughnut Chart */}
-              <Box width="150px" height="150px">
+              <Box width="350px" height="350px">
                 <Doughnut data={budgetData} />
               </Box>
             </Flex>
           </GridItem>
+        </Grid>
 
-          {/* Project Chart */}
-          <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
-            <Heading size="md" mb={4} color="teal.500">Project Duration</Heading>
-            <Bar data={chartData} options={chartOptions} />
+        <Grid templateColumns="repeat(1, 1fr)" gap={6} mb={6}>
+           {/* Project Chart */}
+           <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
+            <Heading size="xl" mb={4} color="teal.500">Project Duration</Heading>
+            <Box width="100%" height="100%">ac
+              <Bar data={chartData} options={chartOptions} />
+            </Box>
           </GridItem>
         </Grid>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+        <Grid templateColumns="repeat(2, 1fr)" gap={6} mb={6}>
           {/* Employees List */}
           <GridItem colSpan={{ base: 2, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
             <Heading size="md" mb={4} color="teal.500">Employees</Heading>
