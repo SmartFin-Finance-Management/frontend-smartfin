@@ -23,11 +23,11 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ isOpen, onClose, orgData, onU
     if (!isOpen) return null;
 
     return (
-        <div style={styles.modalOverlay}>
+        <div style ={styles.modalOverlay}>
             <div style={styles.modalContent}>
-                <h2>Update Organization</h2>
+                <h2 style={styles.modalTitle}>Update Organization</h2>
                 <form onSubmit={handleSubmit}>
-                    <label>
+                    <label style={styles.label}>
                         Name:
                         <input
                             type="text"
@@ -35,38 +35,42 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ isOpen, onClose, orgData, onU
                             value={formData.name}
                             onChange={handleChange}
                             required
+                            style={styles.input}
                         />
                     </label>
-                    <label>
+                    <label style={styles.label}>
                         Type:
                         <input
                             type="text"
                             name="type"
                             value={formData.type}
                             onChange={handleChange}
+                            style={styles.input}
                         />
                     </label>
-                    <label>
+                    <label style={styles.label}>
                         Address:
                         <input
                             type="text"
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
+                            style={styles.input}
                         />
                     </label>
-                    <label>
+                    <label style={styles.label}>
                         Contact Info:
                         <input
                             type="text"
                             name="contact_info"
                             value={formData.contact_info}
                             onChange={handleChange}
+                            style={styles.input}
                         />
                     </label>
-                    <div>
-                        <button type="submit">Update</button>
-                        <button type="button" onClick={onClose}>Cancel</button>
+                    <div style={styles.buttonContainer}>
+                        <button type="submit" style={styles.submitButton}>Update</button>
+                        <button type="button" onClick={onClose} style={styles.cancelButton}>Cancel</button>
                     </div>
                 </form>
             </div>
@@ -83,16 +87,63 @@ const styles = {
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1000,
+        justifyContent: 'center',
+        zIndex: 1000, // Ensure the modal is on top
     },
     modalContent: {
-        background: 'white',
-        padding: '20px',
-        borderRadius: '5px',
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#ffffff',
+        padding: '30px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
         width: '400px',
+        maxWidth: '90%', // Responsive width
+    },
+    modalTitle: {
+        fontSize: '24px',
+        color: '#333',
+        marginBottom: '20px',
+        textAlign: 'center',
+    },
+    label: {
+        display: 'block',
+        marginBottom: '10px',
+        fontSize: '16px',
+        color: '#555',
+    },
+    input: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        marginBottom: '20px',
+        fontSize: '14px',
+        transition: 'border-color 0.3s',
+    },
+    inputFocus: {
+        borderColor: '#007bff',
+    },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    submitButton: {
+        padding: '10px 15px',
+        backgroundColor: '#28a745',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease',
+    },
+    cancelButton: {
+        padding: '10px 15px',
+        backgroundColor: '#dc3545',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease',
     },
 };
 
