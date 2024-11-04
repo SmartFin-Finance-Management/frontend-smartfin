@@ -13,6 +13,7 @@ import OrgDetails from './Pages/OrgDetails';
 import { ProjectDetailsPage } from './Pages/ProjectDetailsPage';
 import EmployeeDetailsPage from './Pages/EmployeeDetailsPage';
 import { ProjectPage } from './Pages/ProjectPage';
+import DashboardPage from './Pages/DashboardPage';
 import ClientInfo from './Pages/clientDetails';
 import ClientEditForm from './Pages/clientEditForm';
 import EditClientForm from './Pages/clientEditForm';
@@ -25,6 +26,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/DashboardPage" element={<DashboardPage />} />
                     <Route path="/project" element={<ProjectDetailsPage />} />
                     <Route path="/clientInput" element={<ClientInput />} />
                     <Route path="/clientManagement" element={<ClientManagement />} />
