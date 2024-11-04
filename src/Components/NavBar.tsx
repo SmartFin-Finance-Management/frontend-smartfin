@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Button, IconButton, Avatar, Float, Circle } from '@chakra-ui/react';
 import { Tooltip } from "../Components/ui/tooltip";
+import { toast } from 'react-toastify';
 
-
+export interface User {
+  org_id: number;
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+}
 
 const NavBar: React.FC = () => {
+  const [User, setUser] = useState<User>();
+
+  useEffect(() => {
+    const fetchEmployeeId = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/employee/getUniqueId');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // const data = await response.json();
+        // setFormData(prev => ({
+        //   ...prev,
+        //   employee_id: data.max_employee_id + 1,
+        // }));
+      } catch (error) {
+        console.error('Failed to fetch unique employee ID:', error);
+        toast.error('Failed to fetch unique employee ID.');
+      }
+    };
+
+    fetchEmployeeId();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleProject = () => {

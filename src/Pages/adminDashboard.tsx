@@ -28,10 +28,13 @@ const OrganizationTable: React.FC = () => {
                 const orgResponse = await axios.get<Organisation[]>('http://localhost:5000/Org');
                 const orgs = orgResponse.data;
 
+                console.log(orgs);
+                
+
                 // Map to get the number of employees for each organization
                 const orgsWithEmployees = await Promise.all(
                     orgs.map(async (org) => {
-                        const empResponse = await axios.get(`http://localhost:5000/Org/${org.org_id}/employees`);
+                        const empResponse = await axios.get(`http://localhost:5000/${org.org_id}/employees`);
                         return {
                             ...org,
                             numberOfEmployees: empResponse.data.length,
@@ -41,7 +44,7 @@ const OrganizationTable: React.FC = () => {
 
                 setOrganizations(orgsWithEmployees);
             } catch (error) {
-                console.error('Error fetching organizations:', error);
+                console.error('Error fetching organizations:'+error, error);
                 setError('Failed to fetch organizations.');
             } finally {
                 setLoading(false);
