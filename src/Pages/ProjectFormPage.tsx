@@ -46,7 +46,6 @@ export const ProjectFormPage: React.FC = () => {
         actual_expenses: 0,
         employees_list: [],
     });
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -87,12 +86,11 @@ export const ProjectFormPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        project.employees_list = [1]; // Example employee IDs
         const orgId = Number(sessionStorage.getItem("org_id") || 0);
         const url = `http://localhost:5000/${orgId}/projects`;
 
         try {
-            await axios.post(url, project, );
+            await axios.post(url, project,);
             setFormData({
                 project_id: project.project_id + 1,
                 org_id: 0,
