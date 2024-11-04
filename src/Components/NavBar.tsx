@@ -27,7 +27,10 @@ const NavBar: React.FC = () => {
     navigate('/home');
   };
 
-
+  const handleSignOut = () => {
+    sessionStorage.clear();
+    navigate('/login'); // Use navigate instead of history.push
+};
 
   return (
     <Box as="header" display="flex" justifyContent="space-between" alignItems="center" padding="1rem" bg="#546a7b" color="white" boxShadow="md">
@@ -68,6 +71,9 @@ const NavBar: React.FC = () => {
         </Button>
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleClient}>
           Client
+        </Button>
+        <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleSignOut}>
+          SignOut
         </Button>
       </Box>
     </Box>

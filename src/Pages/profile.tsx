@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
+import UpdateModal from './Updatemodal'; // Importing the UpdateModal component
 
 // Define the interface for Organisation
 interface Organisation {
@@ -18,6 +19,7 @@ const Profile: React.FC = () => {
     const [orgData, setOrgData] = useState<Organisation | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [modalOpen, setModalOpen] = useState<boolean>(false); // State to control modal visibility
     const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
     useEffect(() => {
@@ -58,9 +60,17 @@ const Profile: React.FC = () => {
         }
     };
 
-    const handleSignOut = () => {
-        sessionStorage.clear();
-        navigate('/login'); // Use navigate instead of history.push
+    const handleUpdate = async (updatedData: Organisation) => {
+        const orgId = sessionStorage.getItem('org_id');
+        if (!orgId) return;
+
+        try {
+            await axios.put(`http://localhost:5000/Org/${orgId}`, updatedData);
+            setOrgData(updatedData); // Update the local state with the new data
+            setModalOpen(false); // Close the modal
+        } catch (err) {
+            setError('Error updating organization. Please try again.');
+        }
     };
 
     if (loading) {
@@ -77,26 +87,33 @@ const Profile: React.FC = () => {
 
     return (
         <div>
-        <NavBar />
-        <div style={styles.orgDetailsContainer}>
-            
-            <h1 style={styles.heading1}>Organization Details</h1>
-            <h2 style={styles.heading2}>{orgData.name}</h2>
-            <p style={styles.paragraph}><strong>Organization ID:</strong> {orgData.org_id}</p>
-            <p style={styles.paragraph}><strong>Type:</strong> {orgData.type || 'N/A'}</p>
-            <p style={styles.paragraph}><strong>Address:</strong> {orgData.address || 'N/A'}</p>
-            <p style={styles.paragraph}><strong>Contact Info:</strong> {orgData.contact_info || 'N/A'}</p>
+            <NavBar />
+            <div style={styles.orgDetailsContainer}>
+                <h1 style={styles.heading1}>Organization Details</h1>
+                <h2 style={styles.heading2}>{orgData.name}</h2>
+                <p style={styles.paragraph}><strong>Organization ID:</strong> {orgData.org_id}</p>
+                <p style={styles.paragraph}><strong>Type:</strong> {orgData.type || 'N/A'}</p>
+                <p style={styles.paragraph}><strong>Address:</strong> {orgData.address || 'N/A'}</p>
+                <p style={styles.paragraph}><strong>Contact Info:</strong> {orgData.contact_info || 'N/A'}</p>
 
-            <div style={{ marginTop: '20px' }}>
-                <button style={{ ...styles.button, ...styles.deleteButton }} onClick={handleDelete}>
-                    Delete Organization
-                </button>
-                <button style={{ ...styles.button, ...styles.signOutButton }} onClick={handleSignOut}>
-                    Sign Out
-                </button>
+                <div style={{ marginTop: '20px' }}>
+                    <button style={{ ...styles.button, ...styles.deleteButton }} onClick={handleDelete}>
+                        Delete Organization
+                    </button>
+                    <button style={{ ...styles.button, ...styles.updateButton }} onClick={() => setModalOpen(true)}>
+                        Update
+                    </button>
+                </div>
             </div>
-        </div>
-        <Footer />
+            <Footer />
+
+            {/* Update Modal */}
+            <UpdateModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                orgData={orgData}
+                onUpdate={handleUpdate}
+            />
         </div>
     );
 };
@@ -148,9 +165,9 @@ const styles: Record<string, React.CSSProperties> = {
         backgroundColor: '#dc3545' // Bootstrap danger color
     },
 
-    // Specific styles for Sign Out button
-    signOutButton: {
-        backgroundColor: '#007bff' // Bootstrap primary color
+    // Specific styles for Update button
+    updateButton: {
+        backgroundColor: '#28a745' // Bootstrap success color
     },
 
     // Button hover effects
@@ -159,6 +176,5 @@ const styles: Record<string, React.CSSProperties> = {
     }
 };
 
-
-
 export default Profile;
+
