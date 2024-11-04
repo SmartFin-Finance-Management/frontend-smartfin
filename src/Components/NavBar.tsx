@@ -13,15 +13,17 @@ export interface User {
 }
 
 const NavBar: React.FC = () => {
-  const [User, setUser] = useState<User>();
+  const [Role, setRole] = useState<string>("");
 
   useEffect(() => {
     const fetchEmployeeId = async () => {
       try {
-        const response = await fetch('http://localhost:3000/employee/getUniqueId');
+        const email = sessionStorage.getItem('email') || 0;
+        const response = await fetch(`http://localhost:9000/get/${email}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        setRole(response)
         // const data = await response.json();
         // setFormData(prev => ({
         //   ...prev,
@@ -52,6 +54,9 @@ const NavBar: React.FC = () => {
 
   const handleProfile = () => {
     navigate('/profile');
+  };
+  const handleUser = () => {
+    navigate('/home');
   };
   const handleHome = () => {
     navigate('/home');
@@ -100,6 +105,9 @@ const NavBar: React.FC = () => {
           Project
         </Button>
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleClient}>
+          Client
+        </Button>
+        <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleUser}>
           Client
         </Button>
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleSignOut}>
