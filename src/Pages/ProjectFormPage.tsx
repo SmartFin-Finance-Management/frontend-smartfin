@@ -92,7 +92,7 @@ export const ProjectFormPage: React.FC = () => {
         const url = `http://localhost:5000/${orgId}/projects`;
 
         try {
-            await axios.post(url, project);
+            await axios.post(url, project, );
             setFormData({
                 project_id: 0,
                 org_id: 0,

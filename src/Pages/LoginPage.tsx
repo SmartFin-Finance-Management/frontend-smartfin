@@ -37,6 +37,7 @@ const LoginPage: React.FC = () => {
 
       // Save the token to session storage
       sessionStorage.setItem('authToken', token);
+      
 
       // Navigate to the home page or wherever appropriate
       navigate('/thome');

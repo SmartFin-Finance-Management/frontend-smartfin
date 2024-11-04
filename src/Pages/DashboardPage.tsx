@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, GridItem, Heading, Text, VStack, HStack, Button, Flex } from '@chakra-ui/react';
 import axios from 'axios';
-import { Doughnut } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
 
@@ -212,12 +212,18 @@ const DashboardPage = () => {
           </GridItem>
 
           <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
-            <Heading size="md" mb={4} color="teal.500">Project Overview</Heading>
-            <VStack spacing={4} align="stretch">
-              <Text>Project A: 80% Complete</Text>
-              <Text>Project B: 50% Complete</Text>
-              <Text>Project C: 30% Complete</Text>
-            </VStack>
+          <Box p={8} bg="gray.50" minH="100vh">
+      <Heading as="h1" size="xl" textAlign="center" mb={6} color="teal.600">
+        Organization Dashboard - Project Timelines
+      </Heading>
+
+      <VStack spacing={6} align="stretch">
+        <Box p={6} bg="white" borderRadius="md" boxShadow="sm">
+          <Heading size="md" mb={4} color="teal.500">Project Durations</Heading>
+          <Bar data={chartData} options={chartOptions} />
+        </Box>
+      </VStack>
+    </Box>
           </GridItem>
         </Grid>
 
