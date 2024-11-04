@@ -75,24 +75,24 @@ const Profile: React.FC = () => {
     }
 
     return (
-        <div className="org-details-container">
+        <div style={styles.orgDetailsContainer}>
             <NavBar />
-        <h1>Organization Details</h1>
-        <h2>{orgData.name}</h2>
-        <p><strong>Organization ID:</strong> {orgData.org_id}</p>
-        <p><strong>Type:</strong> {orgData.type || 'N/A'}</p>
-        <p><strong>Address:</strong> {orgData.address || 'N/A'}</p>
-        <p><strong>Contact Info:</strong> {orgData.contact_info || 'N/A'}</p>
+            <h1 style={styles.heading1}>Organization Details</h1>
+            <h2 style={styles.heading2}>{orgData.name}</h2>
+            <p style={styles.paragraph}><strong>Organization ID:</strong> {orgData.org_id}</p>
+            <p style={styles.paragraph}><strong>Type:</strong> {orgData.type || 'N/A'}</p>
+            <p style={styles.paragraph}><strong>Address:</strong> {orgData.address || 'N/A'}</p>
+            <p style={styles.paragraph}><strong>Contact Info:</strong> {orgData.contact_info || 'N/A'}</p>
 
-        <div style={{ marginTop: '20px' }}>
-            <button onClick={handleDelete} style={{ marginRight: '10px' }}>
-                Delete Organization
-            </button>
-            <button onClick={handleSignOut}>
-                Sign Out
-            </button>
+            <div style={{ marginTop: '20px' }}>
+                <button style={{ ...styles.button, ...styles.deleteButton }} onClick={handleDelete}>
+                    Delete Organization
+                </button>
+                <button style={{ ...styles.button, ...styles.signOutButton }} onClick={handleSignOut}>
+                    Sign Out
+                </button>
+            </div>
         </div>
-    </div>
     );
 };
 
