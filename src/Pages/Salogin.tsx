@@ -4,10 +4,8 @@ import { Input, Button, Box, Stack, Text } from '@chakra-ui/react';
 import { Field } from '../Components/ui/field';
 import { PasswordInput } from "../Components/ui/password-input";
 import { useNavigate } from 'react-router-dom';
-import Footer from '../Components/Footer';
-import TopBarLogin from '../Components/topbarlogin';
 import axios from 'axios';
-import NavBar from '../Components/NavBar';
+
 
 
 const SaloginPage: React.FC = () => {
@@ -49,11 +47,11 @@ const SaloginPage: React.FC = () => {
 
   return (
     <Box>
-      <TopBarLogin />
+      
       <div className="login-container">
         <Box className="card-root">
           <div className="card-header">
-            <Text as="h2" className="card-title">Sign In</Text>
+            <Text as="h2" className="card-title">ADMIN-Sign In</Text>
           </div>
           <div className="card-body">
             <Stack>
@@ -80,7 +78,6 @@ const SaloginPage: React.FC = () => {
             <Button className="gets" onClick={handleCancel}>Cancel</Button>
           </div>
         </Box>
-        <Footer />
       </div>
     </Box>
   );
