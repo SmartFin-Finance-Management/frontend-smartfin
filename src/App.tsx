@@ -17,6 +17,8 @@ import DashboardPage from './Pages/DashboardPage';
 import ClientInfo from './Pages/clientDetails';
 import ClientEditForm from './Pages/clientEditForm';
 import EditClientForm from './Pages/clientEditForm';
+import UserInput from './Pages/UserInput';
+import UserManagement from './Pages/userManagement';
 import Profile from './Pages/profile';
 
 const App: React.FC = () => {
@@ -41,6 +43,8 @@ const App: React.FC = () => {
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
                     <Route path="/client/edit/:clientId" element={<EditClientForm/>} />
                     <Route path="/client/:clientId" element={<ClientInfo />} />
+                    <Route path="/userInput" element={<UserInput />} />
+                    <Route path="/userManagement" element={<UserManagement />} />
                     <Route path="/profile" element={<Profile />} />
                 </Routes>
             </Router>
