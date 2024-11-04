@@ -69,6 +69,13 @@ export interface Employee {
   attendance: Record<string, string>;
 }
 
+export interface BudgetDetails {
+  totalBudget: number;
+  spent: number;
+  remaining: number;
+  project: Project[]; // You can define a more specific type based on your project structure
+}
+
 const DashboardPage = () => {
   const [organization, setOrganization] = useState<Organisation | null>(null);
   const [budgetDetails, setBudgetDetails] = useState<BudgetDetails | null>(null);
@@ -113,11 +120,47 @@ const DashboardPage = () => {
         const response = await axios.get<Project[]>(`http://localhost:5000/${orgId}/projects`);
         const projects = response.data;
         setTotalProjects(projects.length);
-        setActiveProjects(projects.filter((project) => project.status === 'active').length);
+        setActiveProjects(projects.filter((project) => project.status === 'ongoing').length);
       } catch (error) {
         console.error("Failed to fetch projects", error);
       }
     };
+    
+    const fetchAndCalculateBudgetDetails = async () => {
+      try {
+          const orgId = sessionStorage.getItem('org_id');
+          const response = await axios.get<BudgetDetails>(`http://localhost:5000/${orgId}/projects`);
+
+          // Initialize totals
+          let totalBudget = 0;
+          let totalSpent = 0;
+
+          // Calculate total budget and total spent
+          response.data.forEach((project) => {
+              totalBudget += project.total_budget;
+              totalSpent += project.actual_expenses; // Assuming actual_expenses represents the spent amount
+          });
+
+          // Calculate remaining budget
+          const remainingBudget = totalBudget - totalSpent;
+
+          setBudgetDetails({
+              totalBudget,
+              spent: totalSpent,
+              remaining: remainingBudget,
+              projects
+          });
+
+          // Set total projects
+          setTotalProjects(projects.length);
+
+          // Set active projects (assuming there's a status field in the project object)
+          const activeCount = projects.filter(project => project.status === 'active').length;
+          setActiveProjects(activeCount);
+      } catch (error) {
+          console.error(`Error fetching projects: ${error}`);
+      }
+  };
 
     fetchOrganization();
     fetchTotalEmployees();
@@ -125,6 +168,8 @@ const DashboardPage = () => {
 
     fetchOrganization();
     fetchBudgetDetails();
+
+    fetchAndCalculateBudgetDetails();
   }, []);
 
   const budgetData = {
