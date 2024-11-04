@@ -89,29 +89,29 @@ const ClientInfo: React.FC = () => {
 
             {/* Projects Section */}
             <div style={styles.projectsSection}>
-              <h3>Client Projects</h3>
-              <div style={styles.projectList}>
-                {projects.length > 0 ? (
-                  projects.map((project) => (
-                    <div key={project.id} style={styles.projectBox}>
-                      <h4 style={styles.projectTitle}>{project.title}</h4>
-                      <p style={styles.projectDescription}>{project.description}</p>
-                      <button
-                        style={styles.projectButton}
-                        onClick={() => navigate(`/projects/${project.id}`)}
-                      >
-                        View Project
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <div style={styles.noProjects}>No projects to display</div>
-                )}
-              </div>
-              <button style={styles.button} onClick={() => navigate('/project/form')}>
-                Add Project
-              </button>
-            </div>
+  <h3>Client Projects</h3>
+  <div style={styles.projectList}>
+    {projects.length > 0 ? (
+      projects.map((project) => (
+        <div key={project.project_id} style={styles.projectBox}>
+          <h4 style={styles.projectTitle}>{project.project_name}</h4>
+          <p style={styles.projectDescription}>Project ID: {project.project_id}</p>
+          <button
+            style={styles.projectButton}
+            onClick={() => navigate(`/project/${project.project_id}`)}
+          >
+            View Project Details
+          </button>
+        </div>
+      ))
+    ) : (
+      <div style={styles.noProjects}>No projects to display</div>
+    )}
+  </div>
+  <button style={{ ...styles.button, marginTop: '20px' }} onClick={() => navigate('/project/form')}>
+    Add Project
+  </button>
+</div>
           </>
         )}
       </div>
@@ -164,7 +164,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: '10px',
   },
   active: {
-    color: 'green',
+    color: '#2e7d32',
   },
   inactive: {
     color: 'red',

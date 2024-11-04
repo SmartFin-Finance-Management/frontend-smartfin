@@ -17,6 +17,7 @@ import DashboardPage from './Pages/DashboardPage';
 import ClientInfo from './Pages/clientDetails';
 import ClientEditForm from './Pages/clientEditForm';
 import EditClientForm from './Pages/clientEditForm';
+import Profile from './Pages/profile';
 
 const App: React.FC = () => {
     return (
@@ -26,7 +27,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/Home" element={<DashboardPage />} />
+                    <Route path="/home" element={<DashboardPage />} />
                     <Route path="/project" element={<ProjectDetailsPage />} />
                     <Route path="/clientInput" element={<ClientInput />} />
                     <Route path="/clientManagement" element={<ClientManagement />} />
@@ -37,8 +38,9 @@ const App: React.FC = () => {
                     <Route path="/project/:projectId" element={<ProjectPage />} />
                     <Route path="/projects/update/:projectId" element={<ProjectFormPage />} />
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
-                    <Route path="/client/edit/:clientId" element={<EditClientForm />} /> 
+                    <Route path="/client/edit/:clientId" element={<EditClientForm/>} />
                     <Route path="/client/:clientId" element={<ClientInfo />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </Router>
         </Provider>
