@@ -15,6 +15,7 @@ import EmployeeDetailsPage from './Pages/EmployeeDetailsPage';
 import { ProjectPage } from './Pages/ProjectPage';
 import ClientInfo from './Pages/clientDetails';
 import ClientEditForm from './Pages/clientEditForm';
+import EditClientForm from './Pages/clientEditForm';
 
 const App: React.FC = () => {
     return (
