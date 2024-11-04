@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './prof.css';
 
 // Define the interface for Organisation
 interface Organisation {
@@ -74,23 +75,23 @@ const Profile: React.FC = () => {
     }
 
     return (
-        <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '5px' }}>
-            <h1>Organization Details</h1>
-            <h2>{orgData.name}</h2>
-            {/* <p><strong>Organization ID:</strong> {orgData.org_id}</p> */}
-            <p><strong>Type:</strong> {orgData.type || 'N/A'}</p>
-            <p><strong>Address:</strong> {orgData.address || 'N/A'}</p>
-            <p><strong>Contact Info:</strong> {orgData.contact_info || 'N/A'}</p>
+        <div className="org-details-container">
+        <h1>Organization Details</h1>
+        <h2>{orgData.name}</h2>
+        <p><strong>Organization ID:</strong> {orgData.org_id}</p>
+        <p><strong>Type:</strong> {orgData.type || 'N/A'}</p>
+        <p><strong>Address:</strong> {orgData.address || 'N/A'}</p>
+        <p><strong>Contact Info:</strong> {orgData.contact_info || 'N/A'}</p>
 
-            <div style={{ marginTop: '20px' }}>
-                <button onClick={handleDelete} style={{ marginRight: '10px', padding: '10px', backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '5px' }}>
-                    Delete Organization
-                </button>
-                <button onClick={handleSignOut} style={{ padding: '10px', backgroundColor: 'blue', color: 'white', border: 'none', borderRadius: '5px' }}>
-                    Sign Out
-                </button>
-            </div>
+        <div style={{ marginTop: '20px' }}>
+            <button onClick={handleDelete} style={{ marginRight: '10px' }}>
+                Delete Organization
+            </button>
+            <button onClick={handleSignOut}>
+                Sign Out
+            </button>
         </div>
+    </div>
     );
 };
 
