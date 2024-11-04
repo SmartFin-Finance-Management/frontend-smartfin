@@ -75,6 +75,7 @@ const DashboardPage = () => {
   const [totalEmployees, setTotalEmployees] = useState<number>(0);
   const [totalProjects, setTotalProjects] = useState<number>(0);
   const [activeProjects, setActiveProjects] = useState<number>(0);
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     const fetchOrganization = async () => {
@@ -113,11 +114,24 @@ const DashboardPage = () => {
         const response = await axios.get<Project[]>(`http://localhost:5000/${orgId}/projects`);
         const projects = response.data;
         setTotalProjects(projects.length);
-        setActiveProjects(projects.filter((project) => project.status === 'active').length);
+        setActiveProjects(projects.filter((project) => project.status === 'ongoing').length);
       } catch (error) {
         console.error("Failed to fetch projects", error);
       }
     };
+
+    // const fetchProjects = async () => {
+    //   try {
+    //     const orgId = sessionStorage.getItem('org_id');
+    //     const response = await axios.get(`http://localhost:5000/${orgId}/projects`);
+    //     setProjects(response.data);
+    //   } catch (err) {
+    //     console.error('Error fetching projects:', err);
+    //   }
+    // };
+
+    // fetchProjects();
+    
 
     fetchOrganization();
     fetchTotalEmployees();
