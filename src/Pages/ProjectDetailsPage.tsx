@@ -51,7 +51,7 @@ export const ProjectDetailsPage: React.FC = () => {
     // Handler for updating a project
     const handleUpdate = (projectId: number) => {
         console.log("Updating project with ID:", projectId);
-        navigate(`/project/update/${projectId}`);
+        navigate(`/projects/update/${projectId}`);
     };
 
     return (
