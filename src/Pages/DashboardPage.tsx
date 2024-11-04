@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, GridItem, Heading, Text, VStack, HStack, Button, Flex } from '@chakra-ui/react';
 import axios from 'axios';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, Bar } from 'react-chartjs-2';
+import { Chart, LinearScale, CategoryScale, BarElement, Title, Tooltip, Legend } from 'chart.js'; // Import necessary components
 import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
+import dayjs from 'dayjs'; // Import dayjs for date manipulation
 
 export interface Organisation {
   org_id: number;
@@ -25,7 +27,7 @@ export interface BudgetDetails {
   }>;
 }
 
-export interface Project  {
+export interface Project {
   project_id: number;
   org_id: number;
   client_id: number;
@@ -47,15 +49,15 @@ export interface Project  {
 }
 
 export interface Client {
-org_id: number;
-name: string;
-contact_info: string;
+  org_id: number;
+  name: string;
+  contact_info: string;
 }
 
-export interface Employee { 
+export interface Employee {
   employee_id: number;
-  org_id: number; 
-  client_id: number; 
+  org_id: number;
+  client_id: number;
   name: string;
   email: string;
   role: string;
@@ -75,7 +77,7 @@ const DashboardPage = () => {
   const [totalEmployees, setTotalEmployees] = useState<number>(0);
   const [totalProjects, setTotalProjects] = useState<number>(0);
   const [activeProjects, setActiveProjects] = useState<number>(0);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     const fetchOrganization = async () => {
@@ -120,26 +122,25 @@ const DashboardPage = () => {
       }
     };
 
-    // const fetchProjects = async () => {
-    //   try {
-    //     const orgId = sessionStorage.getItem('org_id');
-    //     const response = await axios.get(`http://localhost:5000/${orgId}/projects`);
-    //     setProjects(response.data);
-    //   } catch (err) {
-    //     console.error('Error fetching projects:', err);
-    //   }
-    // };
+    const fetchProjects = async () => {
+      try {
+        const orgId = sessionStorage.getItem('org_id');
+        const response = await axios.get(`http://localhost:5000/${orgId}/projects`);
+        setProjects(response.data);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+      }
+    };
 
-    // fetchProjects();
-    
-
+    fetchProjects();
     fetchOrganization();
     fetchTotalEmployees();
     fetchTotalProjects();
-
-    fetchOrganization();
     fetchBudgetDetails();
   }, []);
+  
+  // Registering Chart.js components
+  Chart.register(LinearScale, CategoryScale, BarElement, Title, Tooltip, Legend); // Register required components
 
   const budgetData = {
     labels: ['Spent', 'Remaining'],
@@ -153,6 +154,56 @@ const DashboardPage = () => {
         hoverBackgroundColor: ['#fc8181', '#68d391'],
       },
     ],
+  };
+
+  const chartData = {
+    labels: projects.map((project) => project.project_name),
+    datasets: [
+      {
+        label: 'Project Duration',
+        data: projects.map((project) => {
+          const start = dayjs(project.start_date);
+          const end = dayjs(project.end_date);
+          return end.diff(start, 'day'); // Calculate duration in days
+        }),
+        backgroundColor: '#4A90E2',
+      },
+    ],
+  };
+
+  const chartOptions = {
+    indexAxis: 'y' as const, // Horizontal bar chart
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const project = projects[context.dataIndex];
+            return `Duration: ${context.raw} days (${dayjs(project.start_date).format('MMM D, YYYY')} - ${dayjs(project.end_date).format('MMM D, YYYY')})`;
+          },
+        },
+      },
+      title: {
+        display: true,
+        text: 'Project Timelines',
+      },
+    },
+    scales: {
+      x: {
+        type: 'linear',
+        position: 'bottom',
+        title: {
+          display: true,
+          text: 'Duration (Days)',
+        },
+      },
+      y: {
+        type: 'category', // Use category for the Y axis
+      },
+    },
   };
 
   return (
@@ -192,32 +243,29 @@ const DashboardPage = () => {
               <VStack spacing={4} align="stretch" flex="1">
                 <HStack justify="space-between" borderBottom="1px solid" borderColor="gray.200" pb={2}>
                   <Text>Total Budget</Text>
-                  <Text fontWeight="bold">₹{budgetDetails?.total_budget?.toLocaleString() || '0'}</Text>
+                  <Text fontWeight="bold">{budgetDetails?.total_budget || 0}</Text>
                 </HStack>
                 <HStack justify="space-between" borderBottom="1px solid" borderColor="gray.200" pb={2}>
                   <Text>Spent</Text>
-                  <Text fontWeight="bold">₹{budgetDetails?.spent?.toLocaleString() || '0'}</Text>
+                  <Text fontWeight="bold">{budgetDetails?.spent || 0}</Text>
                 </HStack>
                 <HStack justify="space-between">
                   <Text>Remaining</Text>
-                  <Text fontWeight="bold">₹{budgetDetails?.remaining?.toLocaleString() || '0'}</Text>
+                  <Text fontWeight="bold">{budgetDetails?.remaining || 0}</Text>
                 </HStack>
               </VStack>
 
-              {/* Donut Chart */}
-              <Box width="150px" height="150px" ml={6}>
+              {/* Doughnut Chart */}
+              <Box width="150px" height="150px">
                 <Doughnut data={budgetData} />
               </Box>
             </Flex>
           </GridItem>
 
+          {/* Project Chart */}
           <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
-            <Heading size="md" mb={4} color="teal.500">Project Overview</Heading>
-            <VStack spacing={4} align="stretch">
-              <Text>Project A: 80% Complete</Text>
-              <Text>Project B: 50% Complete</Text>
-              <Text>Project C: 30% Complete</Text>
-            </VStack>
+            <Heading size="md" mb={4} color="teal.500">Project Duration</Heading>
+            <Bar data={chartData} options={chartOptions} />
           </GridItem>
         </Grid>
 
@@ -256,4 +304,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-

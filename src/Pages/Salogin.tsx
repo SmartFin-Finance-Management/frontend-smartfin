@@ -10,7 +10,7 @@ import axios from 'axios';
 import NavBar from '../Components/NavBar';
 
 
-const LoginPage: React.FC = () => {
+const SaloginPage: React.FC = () => {
   const navigate = useNavigate();
   
   // State to manage username and password input
@@ -30,17 +30,16 @@ const LoginPage: React.FC = () => {
       };
 
       // Call the login endpoint
-      const response = await axios.post('http://localhost:7000/api/auth/login', loginData);
+      const response = await axios.post('http://localhost:9000/salogin', loginData);
 
       // Assuming the response contains a token
       const token = response.data.token; // Adjust based on your API response structure
 
       // Save the token to session storage
       sessionStorage.setItem('authToken', token);
-      
 
       // Navigate to the home page or wherever appropriate
-      navigate('/thome');
+      navigate('/sahome');
     } catch (error) {
       console.error('Login failed:', error);
       // Optionally handle errors, such as showing a notification or an error message
@@ -87,4 +86,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default SaloginPage;
