@@ -25,7 +25,8 @@ const UserManagement: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:9000/');
+        const orgId = sessionStorage.getItem('org_id');
+        const response = await axios.get(`http://localhost:9000/org/${orgId}`);
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
