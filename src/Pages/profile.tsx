@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../Components/NavBar';
+import Footer from '../Components/Footer';
 
 // Define the interface for Organisation
 interface Organisation {
@@ -95,6 +96,7 @@ const Profile: React.FC = () => {
                 </button>
             </div>
         </div>
+        <Footer />
         </div>
     );
 };
