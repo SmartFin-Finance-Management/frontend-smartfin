@@ -40,12 +40,14 @@ export const ProjectDetailsPage: React.FC = () => {
     const [projectList, setProjectList] = useState<IProject[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
+    const [search, setSearch] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await axios.get("http://localhost:4000/projects");
+                const orgId = Number(sessionStorage.getItem("org_id") || 0);
+                const response = await axios.get(`http://localhost:4000/projects/orgs/${orgId}`);
                 setProjectList(response.data);
             } catch (error) {
                 console.error("Error fetching projects:", error);
@@ -84,7 +86,7 @@ export const ProjectDetailsPage: React.FC = () => {
                 );
                 setIsDialogOpen(false);
             } catch (error) {
-                console.error("Error updating project:", error);
+                alert("Error updating project: " + (error.response?.data?.message || error.message));
             }
         }
     };
@@ -94,14 +96,107 @@ export const ProjectDetailsPage: React.FC = () => {
         setSelectedProject(null);
     };
 
+    const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+    };
+
+    const filterList = projectList.filter(project => {
+        return project.project_name.toLowerCase().includes(search.toLowerCase());
+    });
+
+    const handleDelete = async (projectId: Number) => {
+        try {
+            await axios.delete(`http://localhost:4000/projects/${projectId}`);
+            // Remove the deleted project from the list
+            setProjectList(prev => prev.filter(project => project.project_id !== projectId));
+        } catch (error) {
+            console.error("Error deleting project:", error);
+        }
+    };
+
+    // Render input fields for project details
+    const renderInputFields = () => {
+        return (
+            <>
+                <label>Project Name</label>
+                <Input
+                    placeholder="Project Name"
+                    value={selectedProject?.project_name}
+                    onChange={(e) =>
+                        setSelectedProject({ ...selectedProject!, project_name: e.target.value })
+                    }
+                />
+                <label>Start Date</label>
+                <Input
+                    type="date"
+                    value={selectedProject?.start_date}
+                    onChange={(e) =>
+                        setSelectedProject({ ...selectedProject!, start_date: e.target.value })
+                    }
+                />
+                <label>End Date</label>
+                <Input
+                    type="date"
+                    value={selectedProject?.end_date}
+                    onChange={(e) =>
+                        setSelectedProject({ ...selectedProject!, end_date: e.target.value })
+                    }
+                />
+                <label>Status</label>
+                <select
+                    value={selectedProject?.status}
+                    onChange={(e) =>
+                        setSelectedProject({ ...selectedProject!, status: e.target.value })
+                    }
+                    required
+                >
+                    <option value="" disabled>Select Status</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="completed">Completed</option>
+                </select>
+                {["total_budget", "allocated_budget", "remaining_budget", "employee_budget", "technical_budget", "additional_budget", "employee_expenses", "technical_expenses", "additional_expenses", "actual_expenses"].map((field) => (
+                    <div key={field}>
+                        <label>{field.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
+                        <Input
+                            type="number"
+                            placeholder={field.replace('_', ' ')}
+                            value={selectedProject?.[field as keyof IProject]}
+                            onChange={(e) =>
+                                setSelectedProject({
+                                    ...selectedProject!,
+                                    [field]: Number(e.target.value),
+                                })
+                            }
+                        />
+                    </div>
+                ))}
+            </>
+        );
+    };
+
     return (
         <div>
             <NavBar />
             <div style={styles.pageContainer}>
-                <div style={styles.buttonContainer}>
-                    <button style={styles.button} onClick={() => navigate("/project/form")}>
-                        Add New Project
-                    </button>
+                <div style={styles.headerContainer}>
+                    <div style={styles.searchContainer}>
+                        <input
+                            type="text"
+                            value={search}
+                            placeholder="Search project name"
+                            onChange={handleFilter}
+                            style={styles.searchInput}
+                        />
+                    </div>
+                    <div style={styles.buttonContainer}>
+                        <button
+                            style={styles.button}
+                            onClick={() => navigate("/project/form")}
+                        >
+                            Add New Project
+                        </button>
+                    </div>
                 </div>
                 {projectList.length === 0 ? (
                     <div style={styles.noProjectsContainer}>
@@ -109,9 +204,14 @@ export const ProjectDetailsPage: React.FC = () => {
                     </div>
                 ) : (
                     <div style={styles.projectGridContainer}>
-                        {projectList.map((project) => (
+                        {filterList.map((project) => (
                             <div key={project.project_id} style={styles.projectGridItem}>
-                                <ProjectCard project={project} onView={handleView} onUpdate={() => handleUpdate(project.project_id)} />
+                                <ProjectCard
+                                    project={project}
+                                    onView={handleView}
+                                    onUpdate={() => handleUpdate(project.project_id)}
+                                    onDelete={() => handleDelete(project.project_id)}
+                                />
                             </div>
                         ))}
                     </div>
@@ -128,59 +228,7 @@ export const ProjectDetailsPage: React.FC = () => {
                         </DialogHeader>
                         <DialogBody pb="4">
                             <Stack spacing={4}>
-                                <label>Project Name</label>
-                                <Input
-                                    placeholder="Project Name"
-                                    value={selectedProject.project_name}
-                                    onChange={(e) =>
-                                        setSelectedProject({ ...selectedProject, project_name: e.target.value })
-                                    }
-                                />
-                                <label>Start Date</label>
-                                <Input
-                                    type="date"
-                                    value={selectedProject.start_date}
-                                    onChange={(e) =>
-                                        setSelectedProject({ ...selectedProject, start_date: e.target.value })
-                                    }
-                                />
-                                <label>End Date</label>
-                                <Input
-                                    type="date"
-                                    value={selectedProject.end_date}
-                                    onChange={(e) =>
-                                        setSelectedProject({ ...selectedProject, end_date: e.target.value })
-                                    }
-                                />
-                                <label>Status</label>
-                                <select
-                                    value={selectedProject.status}
-                                    onChange={(e) =>
-                                        setSelectedProject({ ...selectedProject, status: e.target.value })
-                                    }
-                                    required
-                                >
-                                    <option value="" disabled>Select Status</option>
-                                    <option value="ongoing">Ongoing</option>
-                                    <option value="upcoming">Upcoming</option>
-                                    <option value="completed">Completed</option>
-                                </select>
-                                {["total_budget", "allocated_budget", "remaining_budget", "employee_budget", "technical_budget", "additional_budget", "employee_expenses", "technical_expenses", "additional_expenses", "actual_expenses"].map((field) => (
-                                    <div key={field}>
-                                        <label>{field.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
-                                        <Input
-                                            type="number"
-                                            placeholder={field.replace('_', ' ')}
-                                            value={selectedProject[field as keyof IProject]}
-                                            onChange={(e) =>
-                                                setSelectedProject({
-                                                    ...selectedProject,
-                                                    [field]: Number(e.target.value),
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                ))}
+                                {renderInputFields()}
                             </Stack>
                         </DialogBody>
                         <DialogFooter>
@@ -205,10 +253,26 @@ const styles: Record<string, React.CSSProperties> = {
         textAlign: "center",
         position: "relative",
     },
+    headerContainer: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "1rem",
+    },
+    searchContainer: {
+        flex: 1,
+        maxWidth: "300px",
+        marginRight: "1rem",
+    },
+    searchInput: {
+        width: "100%",
+        padding: "12px",
+        borderRadius: "4px",
+        border: "1px solid #ccc",
+    },
     buttonContainer: {
         display: "flex",
         justifyContent: "flex-end",
-        marginBottom: "1rem",
     },
     noProjectsContainer: {
         display: "flex",
@@ -225,23 +289,22 @@ const styles: Record<string, React.CSSProperties> = {
     projectGridContainer: {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-        gap: "1.5rem",
-        padding: "1rem",
+        gap: "1rem",
+        justifyItems: "center",
     },
     projectGridItem: {
-        display: "flex",
-        justifyContent: "center",
+        width: "100%",
+        maxWidth: "240px",
     },
     button: {
         padding: "12px 24px",
-        fontSize: "1rem",
-        fontWeight: "bold",
-        color: "#ffffff",
-        backgroundColor: "#4CAF50",
-        border: "2px solid #4CAF50",
-        borderRadius: "5px",
+        borderRadius: "4px",
+        border: "none",
+        backgroundColor: "#007BFF",
+        color: "#FFF",
         cursor: "pointer",
-        transition: "background-color 0.3s ease, border-color 0.3s ease",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        transition: "background-color 0.3s",
     },
 };
+
+export default ProjectDetailsPage;

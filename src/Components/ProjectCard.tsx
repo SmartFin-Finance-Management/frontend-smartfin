@@ -1,4 +1,6 @@
+import { IconButton } from "@chakra-ui/react";
 import React from "react";
+import { FaTrash } from 'react-icons/fa';
 
 interface IProject {
     project_id: number;
@@ -25,11 +27,21 @@ interface ProjectCardProps {
     project: IProject;
     onView: (id: number) => void;
     onUpdate: (id: number) => void;
+    onDelete: (id: number) => void;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onUpdate }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onUpdate, onDelete }) => {
     return (
         <div style={styles.projectCard}>
+            <IconButton
+                colorScheme='red'
+                aria-label="Delete"
+                size="sm"
+                onClick={() => onDelete(project.project_id)}
+                style={styles.deleteButton} // Apply styles to the delete button
+            >
+                <FaTrash />
+            </IconButton>
             <img src="https://via.placeholder.com/80" alt="Project Icon" style={styles.icon} />
             <h2 style={styles.projectName}>{project.project_name}</h2>
             <p style={styles.budget}>Total Budget: ${project.total_budget}</p>
@@ -47,6 +59,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onUpd
 
 const styles: Record<string, React.CSSProperties> = {
     projectCard: {
+        position: "relative", // Allow positioning of the delete button
         width: "100%", // Full width for mobile
         maxWidth: "250px", // Max width for desktop
         height: "300px",
@@ -61,6 +74,11 @@ const styles: Record<string, React.CSSProperties> = {
         alignItems: "center",
         gap: "0.5rem",
         justifyContent: "center",
+    },
+    deleteButton: {
+        position: "absolute", // Position the button absolutely within the card
+        top: "10px", // Distance from the top
+        right: "10px", // Distance from the right
     },
     icon: {
         width: "80px",
