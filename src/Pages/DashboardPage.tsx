@@ -267,7 +267,7 @@ const DashboardPage = () => {
            {/* Project Chart */}
            <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
             <Heading size="xl" mb={4} color="teal.500">Project Duration</Heading>
-            <Box width="100%" height="100%">
+            <Box width="100%" height="100%">ac
               <Bar data={chartData} options={chartOptions} />
             </Box>
           </GridItem>
