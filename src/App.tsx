@@ -42,6 +42,7 @@ const App: React.FC = () => {
                     <Route path="/projects/update/:projectId" element={<ProjectFormPage />} />
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
 
+
                     <Route path="/client/:clientId" element={<ClientInfo />} />
                     <Route path="/userInput" element={<UserInput />} />
                     <Route path="/userManagement" element={<UserManagement />} />
