@@ -189,14 +189,6 @@ export const ProjectDetailsPage: React.FC = () => {
                             style={styles.searchInput}
                         />
                     </div>
-                    <div style={styles.buttonContainer}>
-                        <button
-                            style={styles.button}
-                            onClick={() => navigate("/project/form")}
-                        >
-                            Add New Project
-                        </button>
-                    </div>
                 </div>
                 {projectList.length === 0 ? (
                     <div style={styles.noProjectsContainer}>
