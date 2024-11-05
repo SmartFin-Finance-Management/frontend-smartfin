@@ -83,7 +83,12 @@ const DashboardPage = () => {
     const fetchOrganization = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get<Organisation>(`http://localhost:5000/Org/${orgId}`);
+        const token = sessionStorage.getItem('authToken'); // Retrieve the token from the session storage
+        const response = await axios.get<Organisation>(`http://localhost:7000/api/organisations/Org/${orgId}`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setOrganization(response.data);
       } catch (error) {
         console.error("Failed to fetch organization data", error);
@@ -93,7 +98,12 @@ const DashboardPage = () => {
     const fetchBudgetDetails = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get<BudgetDetails>(`http://localhost:5000/${orgId}/projects/budget_details`);
+        const token = sessionStorage.getItem('authToken'); // Retrieve the token from the session storage
+        const response = await axios.get<BudgetDetails>(`http://localhost:7000/api/organisations/${orgId}/projects/budget_details`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setBudgetDetails(response.data);
       } catch (error) {
         console.error("Failed to fetch budget details", error);
@@ -103,7 +113,12 @@ const DashboardPage = () => {
     const fetchTotalEmployees = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get<Employee[]>(`http://localhost:5000/${orgId}/employees`);
+        const token = sessionStorage.getItem('authToken');
+        const response = await axios.get<Employee[]>(`http://localhost:7000/api/organisation/${orgId}/employees`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setTotalEmployees(response.data.length);
       } catch (error) {
         console.error("Failed to fetch employees", error);
@@ -113,7 +128,12 @@ const DashboardPage = () => {
     const fetchTotalProjects = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get<Project[]>(`http://localhost:5000/${orgId}/projects`);
+        const token = sessionStorage.getItem('authToken'); // Retrieve the token from the session storage
+        const response = await axios.get<Project[]>(`http://localhost:7000/api/organisations/${orgId}/projects`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         const projects = response.data;
         setTotalProjects(projects.length);
         setActiveProjects(projects.filter((project) => project.status === 'ongoing').length);
@@ -125,7 +145,12 @@ const DashboardPage = () => {
     const fetchProjects = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get(`http://localhost:5000/${orgId}/projects`);
+        const token = sessionStorage.getItem('authToken'); // Retrieve the token from the session storage
+        const response = await axios.get(`http://localhost:7000/api/organisations/${orgId}/projects`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setProjects(response.data);
       } catch (err) {
         console.error('Error fetching projects:', err);
