@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NavBar from '../Components/NavBar';
@@ -20,6 +20,8 @@ interface IFinanceForm {
   bank_payee_name: string;
   bank_ifsc: string;
 }
+
+
 
 const FinanceForm: React.FC = () => {
   const location = useLocation();
@@ -82,6 +84,9 @@ const FinanceForm: React.FC = () => {
     try {
       const response = await axios.post(url, formData, {
         responseType: 'blob',
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzMwNzc4OTc1LCJleHAiOjE3MzA3ODI1NzV9.BaNYMKuXZWNzTrVian92Z4FIH-HBKhN3d_xKIHDRMmA}` // Add the token to the Authorization header
+        }
       });
   
       const fileURL = URL.createObjectURL(new Blob([response.data]));
@@ -114,6 +119,29 @@ const FinanceForm: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+  const fetchTransactionId = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/uniqueTransaction_id');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setFormData(prev => ({
+        ...prev,
+        transaction_id: data.max_transaction_id + 1,
+      }));
+      console.log(data.max_transaction_id);
+      
+    } catch (error) {
+      console.error('Failed to fetch unique transaction ID:', error);
+      toast.error('Failed to fetch unique transaction ID.');
+    }
+  };
+
+  fetchTransactionId();
+}, []);
+
   return (
     <div style={styles.page}>
       <NavBar />
@@ -130,9 +158,10 @@ const FinanceForm: React.FC = () => {
                 onChange={handleChange}
                 style={styles.input}
                 required
+                readOnly
               />
             </label>
-            <label style={styles.label}>
+            {/* <label style={styles.label}>
               Project ID:
               <input
                 type="number"
@@ -153,7 +182,7 @@ const FinanceForm: React.FC = () => {
                 style={styles.input}
                 required
               />
-            </label>
+            </label> */}
             <label style={styles.label}>
               Finance User ID:
               <input
@@ -189,15 +218,19 @@ const FinanceForm: React.FC = () => {
             </label>
             <label style={styles.label}>
               Status:
-              <input
-                type="text"
+              <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
                 style={styles.input}
                 required
-              />
+              >
+                <option value="">Select Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Done">Done</option>
+              </select>
             </label>
+
             <label style={styles.label}>
               Transaction Date:
               <input
