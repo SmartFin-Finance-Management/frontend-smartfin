@@ -90,7 +90,7 @@ export const ProjectFormPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log(client_id);
-        project.employees_list = [1]; // Example employee IDs
+        //project.employees_list = [1]; // Example employee IDs
         const orgId = Number(sessionStorage.getItem("org_id") || 0);
         console.log(orgId);
         const url = `http://localhost:5000/${orgId}/projects`;

@@ -4,13 +4,14 @@ import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../Components/NavBar';
+import bcrypt from 'bcryptjs';
 
 interface IUser {
-  org_id: number;  
-  username: string; 
-  role: string;     
-  email: string;    
-  password?: string; 
+  org_id: number;
+  username: string;
+  role: string;
+  email: string;
+  password?: string;
 }
 
 const UserManagement: React.FC = () => {
@@ -71,6 +72,7 @@ const UserManagement: React.FC = () => {
   const handleUpdateUser = async () => {
     if (editUser) {
       try {
+
         await axios.put(`http://localhost:7000/api/auth/get/${editUser.email}`, editUser);
         setUsers(users.map(user => (user.email === editUser.email ? editUser : user)));
         setShowEditModal(false);
@@ -91,7 +93,7 @@ const UserManagement: React.FC = () => {
           <button onClick={() => navigate('/userInput')} style={styles.addButton}>
             Add User
           </button>
-          
+
           <div style={styles.filterContainer}>
             <input
               type="text"
