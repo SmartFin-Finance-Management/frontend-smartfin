@@ -26,7 +26,6 @@ const FinanceForm: React.FC = () => {
   const location = useLocation();
   const { project_id = 0, client_id = 0 } = location.state || {};
 
-  
   const [formData, setFormData] = useState<IFinanceForm>({
     transaction_id: 0,
     project_id,
