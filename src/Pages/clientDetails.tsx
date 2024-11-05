@@ -140,7 +140,11 @@ const ClientInfo: React.FC = () => {
                   <div style={styles.noProjects}>No projects to display</div>
                 )}
               </div>
-              <button style={{ ...styles.button, marginTop: '20px' }} onClick={() => navigate('/project/form')}>
+              <button style={{ ...styles.button, marginTop: '20px' }} onClick={() => navigate('/project/form',
+                {
+                  state: { client_id: clientId },
+                }
+              )}>
                 Add Project
               </button>
             </div>
@@ -158,7 +162,7 @@ const ClientInfo: React.FC = () => {
                     style={styles.inputField}
                   />
                 </div>
-               
+
                 <div style={styles.inputContainer}>
                   <label>Phone</label>
                   <input
