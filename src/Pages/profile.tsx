@@ -32,7 +32,12 @@ const Profile: React.FC = () => {
             }
 
             try {
-                const response = await axios.get<Organisation>(`http://localhost:5000/Org/${orgId}`);
+                const token = sessionStorage.getItem('authToken'); // Assuming token is stored in session storage
+                const response = await axios.get<Organisation>(`http://localhost:7000/api/organisations/Org/${orgId}`,{
+                    headers: {
+                      Authorization: `Bearer ${token}` // Add the token to the Authorization header
+                    }
+                  });
                 setOrgData(response.data); // TypeScript knows that response.data is an Organisation
             } catch (err) {
                 setError('Error fetching organization details. Please try again.');
@@ -52,7 +57,12 @@ const Profile: React.FC = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:5000/Org/${orgId}`);
+            const token = sessionStorage.getItem('authToken'); // Assuming token is stored in session storage
+            await axios.delete(`http://localhost:7000/api/organisations/Org/${orgId}`,{
+                headers: {
+                  Authorization: `Bearer ${token}` // Add the token to the Authorization header
+                }
+              });
             sessionStorage.clear();
             navigate('/login'); // Use navigate instead of history.push
         } catch (err) {
@@ -65,7 +75,12 @@ const Profile: React.FC = () => {
         if (!orgId) return;
 
         try {
-            await axios.put(`http://localhost:5000/Org/${orgId}`, updatedData);
+            const token = sessionStorage.getItem('authToken'); // Assuming token is stored in session storage
+            await axios.put(`http://localhost:7000/api/organisations/Org/${orgId}`, updatedData,{
+                headers: {
+                  Authorization: `Bearer ${token}` // Add the token to the Authorization header
+                }
+              });
             setOrgData(updatedData); // Update the local state with the new data
             setModalOpen(false); // Close the modal
         } catch (err) {

@@ -79,13 +79,14 @@ const FinanceForm: React.FC = () => {
       return;
     }
 
-    const url = `http://localhost:8000/finance`;
+    const url = `http://localhost:7000/api/finances/finance`;
 
     try {
-      const response = await axios.post(url, formData, {
-        responseType: 'blob',
+      const token = sessionStorage.getItem('authToken');
+      const response = await axios.post(url, formData,{
+        responseType:'blob',
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzMwNzc4OTc1LCJleHAiOjE3MzA3ODI1NzV9.BaNYMKuXZWNzTrVian92Z4FIH-HBKhN3d_xKIHDRMmA}` // Add the token to the Authorization header
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
         }
       });
   

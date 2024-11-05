@@ -20,7 +20,12 @@ const NavBar: React.FC = () => {
     const fetchEmployeeId = async () => {
       try {
         const email = sessionStorage.getItem('email') || 0;
-        const response = await axios.get<User>(`http://localhost:9000/get/${email}`);
+        const token = sessionStorage.getItem('authToken') || 0;
+        const response = await axios.get<User>(`http://localhost:7000/api/auth/get/${email}`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         if (response.status !== 200) {
           throw new Error('No user found');
         }
