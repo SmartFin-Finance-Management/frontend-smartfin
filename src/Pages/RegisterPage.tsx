@@ -7,28 +7,49 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import TopBarRegister from '../Components/TopBarRegister';
 
-
 const RegistrationPage: React.FC = () => {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState<string | null>(null);
 
   const handleCancel = () => {
     navigate('/');
   };
 
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 8) return 'Password must be at least 8 characters long.';
+    if (!/[A-Z]/.test(password)) return 'Password must contain at least one uppercase letter.';
+    if (!/[a-z]/.test(password)) return 'Password must contain at least one lowercase letter.';
+    if (!/[0-9]/.test(password)) return 'Password must contain at least one number.';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return 'Password must contain at least one special character.';
+    return null;
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordError(validatePassword(newPassword));
+  };
+
   const handleRegister = () => {
-    // Save data in session storage
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
+    // Validate password and confirm password
+    if (passwordError) {
+      alert(passwordError);
       return;
     }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    // Save data in session storage (Do not store passwords in plain text in real applications)
     sessionStorage.setItem('username', username);
     sessionStorage.setItem('email', email);
-    sessionStorage.setItem('password', password); // Ideally, don't store passwords in plain text
-    
+    sessionStorage.setItem('password', password);
     
     navigate('/orgdetails');
   };
@@ -51,7 +72,8 @@ const RegistrationPage: React.FC = () => {
                 <Input className="input-field" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
               </Field>
               <Field label="Password">
-                <PasswordInput placeholder="Create a password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <PasswordInput placeholder="Create a password" value={password} onChange={handlePasswordChange} />
+                {passwordError && <Text color="red.500" fontSize="sm">{passwordError}</Text>}
               </Field>
               <Field label="Confirm Password">
                 <PasswordInput placeholder="Confirm your password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
@@ -68,8 +90,5 @@ const RegistrationPage: React.FC = () => {
     </Box>
   );
 };
-
-
-
 
 export default RegistrationPage;
