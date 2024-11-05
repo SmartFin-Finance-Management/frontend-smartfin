@@ -77,11 +77,15 @@ const FinanceForm: React.FC = () => {
       return;
     }
 
-    const url = `http://localhost:8000/finance`;
+    const url = `http://localhost:7000/api/finances/finance`;
 
     try {
-      const response = await axios.post(url, formData, {
-        responseType: 'blob',
+      const token = sessionStorage.getItem('authToken');
+      const response = await axios.post(url, formData,{
+        responseType:'blob',
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        }
       });
   
       const fileURL = URL.createObjectURL(new Blob([response.data]));
