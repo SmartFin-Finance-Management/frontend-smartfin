@@ -5,7 +5,7 @@ import { Doughnut, Bar } from 'react-chartjs-2';
 import { Chart, LinearScale, CategoryScale, BarElement, Title, Tooltip, Legend } from 'chart.js'; // Import necessary components
 import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
-import dayjs from 'dayjs'; // Import dayjs for date manipulation
+import dayjs from 'dayjs';
 
 export interface Organisation {
   org_id: number;
@@ -301,6 +301,7 @@ const DashboardPage = () => {
             </Button>
           </GridItem>
         </Grid>
+
       </Box>
       <Footer />
     </>

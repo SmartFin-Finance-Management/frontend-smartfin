@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Heading, Button, IconButton, Avatar, Float, Circle } from '@chakra-ui/react';
 import { Tooltip } from "../Components/ui/tooltip";
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export interface User {
   org_id: number;
@@ -13,20 +14,17 @@ export interface User {
 }
 
 const NavBar: React.FC = () => {
-  const [User, setUser] = useState<User>();
+  const [Role, setRole] = useState<string>("");
 
   useEffect(() => {
     const fetchEmployeeId = async () => {
       try {
-        const response = await fetch('http://localhost:3000/employee/getUniqueId');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const email = sessionStorage.getItem('email') || 0;
+        const response = await axios.get<User>(`http://localhost:9000/get/${email}`);
+        if (response.status !== 200) {
+          throw new Error('No user found');
         }
-        // const data = await response.json();
-        // setFormData(prev => ({
-        //   ...prev,
-        //   employee_id: data.max_employee_id + 1,
-        // }));
+        setRole(response.data.role)
       } catch (error) {
         console.error('Failed to fetch unique employee ID:', error);
         toast.error('Failed to fetch unique employee ID.');
@@ -52,6 +50,9 @@ const NavBar: React.FC = () => {
 
   const handleProfile = () => {
     navigate('/profile');
+  };
+  const handleUser = () => {
+    navigate('/userManagement');
   };
   const handleHome = () => {
     navigate('/home');
@@ -102,6 +103,9 @@ const NavBar: React.FC = () => {
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleClient}>
           Client
         </Button>
+        { (Role === 'admin' || Role === 'sa') && <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleUser}>
+          User
+        </Button>}
         <Button background="white" marginRight="1rem" color="#546a7b" onClick={handleSignOut}>
           SignOut
         </Button>

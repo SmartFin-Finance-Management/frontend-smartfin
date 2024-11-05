@@ -332,7 +332,7 @@ const styles: Record<string, React.CSSProperties> = {
   icon: {
     marginRight: '8px',
     fontSize: '1.2rem',
-    color: '#4CAF50',
+    color: '#546a7b',
   },
   projectsSection: {
     margin: '20px 0',
@@ -364,7 +364,7 @@ const styles: Record<string, React.CSSProperties> = {
   projectButton: {
     marginTop: '10px',
     padding: '5px 10px',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#546a7b',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
@@ -373,7 +373,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   button: {
     padding: '10px 15px',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#546a7b',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
