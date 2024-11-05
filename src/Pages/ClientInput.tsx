@@ -71,7 +71,8 @@ const ClientInput: React.FC = () => {
     e.preventDefault();
     try {
       const token = sessionStorage.getItem('authToken') || ''; // Fetch the token from session storage
-      const response = await axios.post(`http://localhost:7000/api/clients/clients`, formData,{
+      const org_id = sessionStorage.getItem('org_id');
+      const response = await axios.post(`http://localhost:7000/api/organisations/${org_id}/clients`, formData,{
         headers: {
           Authorization: `Bearer ${token}` // Add the token to the Authorization header
         }

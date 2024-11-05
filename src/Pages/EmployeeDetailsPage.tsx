@@ -50,10 +50,15 @@ const EmployeeDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       const orgId = Number(sessionStorage.getItem("org_id") || 0);
-      const url = `http://localhost:5000/${orgId}/employees`;
+      const url = `http://localhost:7000/api/organisations/${orgId}/employees`;
 
       try {
-        const response = await axios.get(url);
+        const token = sessionStorage.getItem("authToken");
+        const response = await axios.get(url,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         
         const convertedEmployees = response.data.map((employee: any) => ({
           ...employee,
@@ -99,7 +104,12 @@ const EmployeeDetailsPage: React.FC = () => {
 
   const deleteEmployee = async (employee_id: number) => {
     try {
-      await axios.delete(`http://localhost:3000/employees/${employee_id}`);
+      const token = sessionStorage.getItem("authToken");
+      await axios.delete(`http://localhost:7000/api/employees/employees/${employee_id}`,{
+        headers: {
+          Authorization: `Bearer ${token}` // Add the token to the Authorization header
+        }
+      });
       
       setEmployees((prevEmployees) => prevEmployees.filter((emp) => emp.employee_id !== employee_id));
       setFilteredEmployees((prevFiltered) => prevFiltered.filter((emp) => emp.employee_id !== employee_id));
@@ -136,7 +146,12 @@ const EmployeeDetailsPage: React.FC = () => {
   const handleSaveChanges = async () => {
     if (selectedEmployee) {
       try {
-        await axios.put(`http://localhost:3000/employees/${selectedEmployee.employee_id}`, selectedEmployee);
+        const token = sessionStorage.getItem("authToken");
+        await axios.put(`http://localhost:7000/api/employees/employees/${selectedEmployee.employee_id}`, selectedEmployee,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         // Update the local state
         setEmployees((prevEmployees) =>
           prevEmployees.map((emp) =>
