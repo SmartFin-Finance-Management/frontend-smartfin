@@ -114,7 +114,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     const fetchEmployeeId = async () => {
       try {
         const token = sessionStorage.getItem(`authToken`);
-        const response = await fetch('http://localhost:7000/api/employees/employee/getUniqueId'{
+        const response = await fetch('http://localhost:7000/api/employees/employee/getUniqueId',{
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
