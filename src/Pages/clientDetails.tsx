@@ -31,7 +31,12 @@ const ClientInfo: React.FC = () => {
   useEffect(() => {
     const fetchClientDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8008/clients/${clientId}`);
+        const token = sessionStorage.getItem('authToken'); // Get the token from the session storage
+        const response = await axios.get(`http://localhost:7000/api/clients/clients/${clientId}`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setClient(response.data);
       } catch (error) {
         console.error('Error fetching client details:', error);
@@ -40,7 +45,12 @@ const ClientInfo: React.FC = () => {
 
     const fetchClientProjects = async () => {
       try {
-        const response = await axios.get(`http://localhost:8008/clients/projects/${clientId}`);
+        const token = sessionStorage.getItem('authToken'); // Get the token from the session storage
+        const response = await axios.get(`http://localhost:7000/api/clients/clients/projects/${clientId}`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setProjects(response.data);
       } catch (error) {
         console.error('Error fetching client projects:', error);
@@ -59,7 +69,12 @@ const ClientInfo: React.FC = () => {
   const handleSaveChanges = async () => {
     if (editedClient) {
       try {
-        await axios.put(`http://localhost:8008/clients/${clientId}`, editedClient);
+        const token = sessionStorage.getItem('authToken'); // Get the token from the session storage
+        await axios.put(`http://localhost:7000/api/clients/clients/${clientId}`, editedClient,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setClient(editedClient);
         setShowEditModal(false);
         alert('Client details updated successfully.');
@@ -73,7 +88,12 @@ const ClientInfo: React.FC = () => {
   const handleDelete = async () => {
     if (window.confirm(`Are you sure you want to delete client ${client?.name}?`)) {
       try {
-        await axios.delete(`http://localhost:8008/clients/${clientId}`);
+        const token = sessionStorage.getItem('authToken'); // Get the token from the session storage
+        await axios.delete(`http://localhost:7000/api/clients/clients/${clientId}`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         alert(`Client ${client?.name} has been deleted.`);
         navigate('/clientManagement');
       } catch (error) {

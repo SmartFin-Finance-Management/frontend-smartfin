@@ -37,7 +37,12 @@ const ClientInput: React.FC = () => {
 
     const fetchMaxClientId = async () => {
       try {
-        const response = await axios.get(`http://localhost:8008/clients/clientId/max`);
+        const token = sessionStorage.getItem('authToken') || ''; // Fetch the token from session storage
+        const response = await axios.get(`http://localhost:7000/api/clients/clients/clientId/max`,{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         if (response.status === 200) {
           // Update the client ID with the maximum client ID from the server
           const maxClientId = response.data.max_client_id;
@@ -65,7 +70,13 @@ const ClientInput: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:8008/clients`, formData);
+      const token = sessionStorage.getItem('authToken') || ''; // Fetch the token from session storage
+      const org_id = sessionStorage.getItem('org_id');
+      const response = await axios.post(`http://localhost:7000/api/organisations/${org_id}/clients`, formData,{
+        headers: {
+          Authorization: `Bearer ${token}` // Add the token to the Authorization header
+        }
+      });
       if (response.status === 200 || response.status === 201) {
         toast.success('Client added successfully!'+formData.clientId, {
           position: 'top-right',

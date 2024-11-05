@@ -110,6 +110,9 @@ export const ProjectPage: React.FC = () => {
                     onClick={handleRedirect}>
                       invoice
                     </Button>
+                    <Button colorScheme='green' onClick={() => navigate(`/InvoiceDetailsPage/${projectId}`)}>
+                      View Invoice
+                    </Button>
                 </div>
                 <div style={styles.metricsBox}>
                     <h1 style={styles.keyMetricsHeading}>Key Metrics</h1>

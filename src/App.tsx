@@ -21,6 +21,10 @@ import Profile from './Pages/profile';
 import SaloginPage from './Pages/Salogin';
 import OrganizationTable from './Pages/adminDashboard';
 import FinanceForm from './Pages/FinanceForm';
+import InvoiceDetailsPage from './Pages/InvoiceDetailsPage';
+import TermsConditions from './Pages/terms';
+import PrivacyPolicy from './Pages/policy';
+import Contact from './Pages/Contact';
 
 const App: React.FC = () => {
     return (
@@ -52,8 +56,13 @@ const App: React.FC = () => {
                     <Route path="/saLogin" element={<SaloginPage />} />
                     <Route path="/saHome" element={<OrganizationTable />} />
 
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-conditions" element={<TermsConditions />} />
+                    <Route path="/contact" element={<Contact />} />
 
 
+
+                    <Route path="/InvoiceDetailsPage/:projectId" element={<InvoiceDetailsPage />} />
                     <Route path="/FinanceForm" element={<FinanceForm />} />
                 </Routes>
             </Router>

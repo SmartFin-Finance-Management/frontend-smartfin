@@ -46,7 +46,7 @@ const UserInput: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:9000/`, formData);
+      const response = await axios.post(`http://localhost:7000/api/auth/`, formData);
       if (response.status === 200 || response.status === 201) {
         toast.success('User added successfully!', {
           position: 'top-right',
