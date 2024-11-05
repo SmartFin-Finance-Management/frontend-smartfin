@@ -54,39 +54,42 @@ const FinanceForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const orgId = Number(sessionStorage.getItem("org_id") || 0);
-    const url = `http://localhost:5000/${orgId}/finance`;
+    const url = `http://localhost:8000/finance`;
 
     try {
       const response = await axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        responseType: 'blob',
       });
-
-      if (response.status === 200 || response.status === 201) {
-        toast.success("Finance record successfully created!", {
-          position: 'top-right',
-          autoClose: 3000,
-        });
-        setFormData({
-          ...formData,
-          transaction_id: formData.transaction_id + 1,
-          project_id: 0,
-          client_id: 0,
-          finance_user_id: 0,
-          invoice_number: '',
-          amount: 0,
-          status: '',
-          transaction_date: '',
-          bank_name: '',
-          bank_account_no: '',
-          bank_payee_name: '',
-          bank_ifsc: '',
-        });
-      } else {
-        throw new Error('Failed to create finance record');
-      }
+  
+      const fileURL = URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = fileURL;
+      link.setAttribute('download', `finance_transaction_${formData.invoice_number}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      // if (response.status === 200 || response.status === 201) {
+      //   toast.success("Finance record successfully created!", {
+      //     position: 'top-right',
+      //     autoClose: 3000,
+      //   });
+      //   setFormData({
+      //     ...formData,
+      //     transaction_id: formData.transaction_id + 1,
+      //     project_id: 0,
+      //     client_id: 0,
+      //     finance_user_id: 0,
+      //     invoice_number: '',
+      //     amount: 0,
+      //     status: '',
+      //     transaction_date: '',
+      //     bank_name: '',
+      //     bank_account_no: '',
+      //     bank_payee_name: '',
+      //     bank_ifsc: '',
+      //   });
+      // } else {
+      //   throw new Error('Failed to create finance record');
+      // }
     } catch (error) {
       console.error('Error:', error);
       toast.error('Failed to create finance record');
@@ -150,8 +153,8 @@ const FinanceForm: React.FC = () => {
             </label>
           </div>
           <div style={styles.buttons}>
-            <button type="submit" style={styles.submitButton}>Submit</button>
             <button type="button" style={styles.cancelButton} onClick={() => window.history.back()}>Cancel</button>
+            <button type="submit" style={styles.submitButton}>Submit</button>
           </div>
         </form>
       </div>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Button } from "@chakra-ui/react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -33,6 +34,9 @@ export const ProjectPage: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>();
     const [project, setProject] = useState<IProject | null>(null);
     const [employees, setEmployees] = useState<any[]>([]);
+
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -85,12 +89,27 @@ export const ProjectPage: React.FC = () => {
         ],
     };
 
+    const handleRedirect = () => {
+      const projectId = project.project_id; 
+      const clientId = project.client_id;
+  
+      // Navigate to FinanceFormPage with project_id and client_id in state
+      navigate('/FinanceForm', {
+        state: { project_id: projectId, client_id: clientId },
+      });
+    };
+
     return (
         <div>
             <NavBar />
             <div style={styles.container}>
                 <div style={styles.projectNameBox}>
                     <h1>{project.project_name}</h1>
+                    <Button 
+                    colorPalette='blue'
+                    onClick={handleRedirect}>
+                      invoice
+                    </Button>
                 </div>
                 <div style={styles.metricsBox}>
                     <h1 style={styles.keyMetricsHeading}>Key Metrics</h1>
