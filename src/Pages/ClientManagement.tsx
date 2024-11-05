@@ -21,7 +21,12 @@ const ClientManagement: React.FC = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await axios.get('http://localhost:8008/clients');
+        const token = localStorage.getItem('authToken'); // Assuming token is stored in localStorage
+        const response = await axios.get('http://localhost:7000/clients/clients',{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         setClients(response.data);
       } catch (error) {
         console.error('Error fetching clients:', error);
