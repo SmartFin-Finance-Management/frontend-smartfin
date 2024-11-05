@@ -22,7 +22,7 @@ const ClientManagement: React.FC = () => {
     const fetchClients = async () => {
       try {
         const token = localStorage.getItem('authToken'); // Assuming token is stored in localStorage
-        const response = await axios.get('http://localhost:7000/clients/clients',{
+        const response = await axios.get('http://localhost:7000/api/clients/clients',{
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
