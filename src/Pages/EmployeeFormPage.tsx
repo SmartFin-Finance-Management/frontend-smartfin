@@ -60,14 +60,16 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     e.preventDefault();
   
     const orgId = Number(sessionStorage.getItem("org_id") || 0);
-    const url = `http://localhost:5000/${orgId}/employees`;
+    const url = `http://localhost:7000/api/organisations/${orgId}/employees`;
 
     console.log(formData);
     
     try {
+      const token = sessionStorage.getItem(`authToken`);
       const response = await axios.post(url, formData, {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
       });
   
@@ -111,7 +113,12 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
   useEffect(() => {
     const fetchEmployeeId = async () => {
       try {
-        const response = await fetch('http://localhost:3000/employee/getUniqueId');
+        const token = sessionStorage.getItem(`authToken`);
+        const response = await fetch('http://localhost:7000/api/employees/employee/getUniqueId'{
+          headers: {
+            Authorization: `Bearer ${token}` // Add the token to the Authorization header
+          }
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
