@@ -26,7 +26,7 @@ const UserManagement: React.FC = () => {
     const fetchUsers = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
-        const response = await axios.get(`http://localhost:9000/org/${orgId}`);
+        const response = await axios.get(`http://localhost:7000/api/auth/org/${orgId}`);
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -58,7 +58,7 @@ const UserManagement: React.FC = () => {
     if (userToDelete) {
       const email = userToDelete.email;
       try {
-        await axios.delete(`http://localhost:9000/get/${email}`);
+        await axios.delete(`http://localhost:7000/api/auth/get/${email}`);
         setUsers(users.filter(user => user.email !== email));
         setShowDeleteModal(false);
         setUserToDelete(null);
@@ -71,7 +71,7 @@ const UserManagement: React.FC = () => {
   const handleUpdateUser = async () => {
     if (editUser) {
       try {
-        await axios.put(`http://localhost:9000/get/${editUser.email}`, editUser);
+        await axios.put(`http://localhost:7000/api/auth/get/${editUser.email}`, editUser);
         setUsers(users.map(user => (user.email === editUser.email ? editUser : user)));
         setShowEditModal(false);
       } catch (error) {
