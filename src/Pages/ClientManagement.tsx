@@ -21,16 +21,16 @@ const ClientManagement: React.FC = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const token = localStorage.getItem('authToken'); // Assuming token is stored in localStorage
+        const token = sessionStorage.getItem('authToken'); // Assuming token is stored in localStorage
         const org_id = Number(sessionStorage.getItem('org_id') || 0); // Assuming org_id is stored in sessionStorage
-        const response = await axios.get(`http://localhost:7000/api/organisations/${org_id}/clients`,{
+        const response = await axios.get(`http://localhost:7000/api/organisations/${org_id}/clients`, {
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
         });
         setClients(response.data);
       } catch (error) {
-        console.error('Error fetching clients:', error);
+        console.error('%%%%%%%Error fetching clients:' + error, error);
       }
     };
 
@@ -54,9 +54,9 @@ const ClientManagement: React.FC = () => {
   };
 
   return (<div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>
-      <NavBar />
+    <NavBar />
     <div style={styles.container}>
-      
+
       <div style={styles.innerContainer}>
         <h2 style={styles.title}>Client Overview</h2>
         <button style={styles.addButton} onClick={handleAddClient}>
@@ -98,7 +98,7 @@ const ClientManagement: React.FC = () => {
       </div>
       <Footer />
     </div>
-    </div>
+  </div>
   );
 };
 
@@ -157,20 +157,20 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '10px',
     textAlign: 'center',
     color: '#393D3f',
-    
+
   },
   clientList: {
-   
+
     borderRadius: '5px',
     padding: '10px',
-    boxShadow:'0 8px 20px rgba(0, 0, 0, 0)',
-    
+    boxShadow: '0 8px 20px rgba(0, 0, 0, 0)',
+
   },
   clientGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
     gap: '15px',
-    
+
   },
   clientItem: {
     backgroundColor: '#fdfdff',
@@ -183,7 +183,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.2s, box-shadow 0.2s',
     cursor: 'pointer',
-    boxShadow:'0 8px 20px rgba(0, 0, 0, 0.15)',
+    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
   },
   iconContainer: {
     backgroundColor: '#62929e',

@@ -38,17 +38,21 @@ const ClientInput: React.FC = () => {
     const fetchMaxClientId = async () => {
       try {
         const token = sessionStorage.getItem('authToken') || ''; // Fetch the token from session storage
-        const response = await axios.get(`http://localhost:7000/api/clients/clients/clientId/max`,{
+        console.log(token)
+        const co = {
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
-        });
+        }
+        const response = await axios.get(`http://localhost:7000/api/clients/clients/clientId/max`, co
+        );
+
         if (response.status === 200) {
           // Update the client ID with the maximum client ID from the server
           const maxClientId = response.data.max_client_id;
           setFormData((prev) => ({ ...prev, clientId: maxClientId + 1 })); // Increment max clientId by 1 for new client
         } else {
-          toast.error('Error fetching client ID. Please try again.'+response.data.clientId);
+          toast.error('Error fetching client ID. Please try again.' + response.data.clientId);
         }
       } catch (error) {
         toast.error('Error fetching client ID. Please try again.');
@@ -72,20 +76,22 @@ const ClientInput: React.FC = () => {
     try {
       const token = sessionStorage.getItem('authToken') || ''; // Fetch the token from session storage
       const org_id = sessionStorage.getItem('org_id');
-      const response = await axios.post(`http://localhost:7000/api/organisations/${org_id}/clients`, formData,{
+      const co = {
         headers: {
           Authorization: `Bearer ${token}` // Add the token to the Authorization header
         }
-      });
+      }
+      const response = await axios.post(`http://localhost:7000/api/organisations/${org_id}/clients`, formData, co);
+      console.log(response + "hello")
       if (response.status === 200 || response.status === 201) {
-        toast.success('Client added successfully!'+formData.clientId, {
+        toast.success('Client added successfully!' + formData.clientId, {
           position: 'top-right',
           autoClose: 3000,
         });
 
         // Reset form data except orgId
         setFormData({
-          clientId: formData.clientId+1,
+          clientId: formData.clientId + 1,
           orgId: formData.orgId,
           name: '',
           phone: '',
@@ -98,7 +104,7 @@ const ClientInput: React.FC = () => {
         throw new Error('Failed to add client');
       }
     } catch (error) {
-      toast.error('Error adding client. Please try again.'+formData.clientId+error.message);
+      toast.error('Error adding client. Please try again.' + formData.clientId + error.message);
     }
   };
 
