@@ -85,7 +85,7 @@ export const ProjectDetailsPage: React.FC = () => {
                     )
                 );
                 setIsDialogOpen(false);
-            } catch (error) {
+            } catch (error: any) {
                 alert("Error updating project: " + (error.response?.data?.message || error.message));
             }
         }
