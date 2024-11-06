@@ -69,6 +69,10 @@ export const EmployeesPage: React.FC = () => {
                 // Ensure employees_list is correctly updated
                 const employees_list = [...project.employees_list, employeeId];
                 console.log(employees_list);
+                if (project.status === "ongoing") {
+                    const project_id = project.project_id;
+                    await axios.get(`http://localhost:3000/employees/assignProject/${employeeId}/${project_id}`);
+                }
                 // Send the updated project to the API
                 const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, employees_list);
                 setProject(response.data); // Update local project state with the response data
