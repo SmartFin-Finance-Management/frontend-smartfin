@@ -116,7 +116,7 @@ const UserManagement: React.FC = () => {
   if(Role !== 'admin') return <AccessDenied />;
 
   return (
-    <div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: 'white', minHeight: '100vh' }}>
       <NavBar />
       <div style={styles.whiteContainer}>
         <div style={styles.container}>

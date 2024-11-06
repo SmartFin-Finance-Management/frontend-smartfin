@@ -193,8 +193,8 @@ console.log(res);
     }
   };
 
-  if(Role !== 'Finance Manager') return <AccessDenied />;
-  
+  if(Role !== 'Finance Manager' && Role !== 'admin' ) return <AccessDenied />;
+
   return (
     <>
       <NavBar />

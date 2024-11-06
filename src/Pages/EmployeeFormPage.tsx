@@ -48,6 +48,14 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
 
   const navigate = useNavigate();
 
+  function calculateLPA(hourlyRate: number) {
+    const workingHoursPerDay = 8;
+    const workingDaysPerYear = 260;
+    const annualSalary = hourlyRate * workingHoursPerDay * workingDaysPerYear;
+    const lpa = annualSalary / 100000;
+    return lpa;
+}
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -59,14 +67,17 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
+    // Calculate LPA and assign it to formData
+    const calculatedLPA = calculateLPA(formData.hourly_rate);
+    const updatedFormData = { ...formData, lpa: calculatedLPA };
+    console.log(updatedFormData);
+
     const orgId = Number(sessionStorage.getItem("org_id") || 0);
     const url = `http://localhost:7000/api/organisations/${orgId}/employees`;
 
-    console.log(formData);
-    
     try {
       const token = sessionStorage.getItem(`authToken`);
-      const response = await axios.post(url, formData, {
+      const response = await axios.post(url, updatedFormData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -74,16 +85,14 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
       });
   
       if (response.status === 200 || response.status === 201) {
-        console.log(response.data);
-        
-        toast.success(`Employee successfully created! ID: ${formData.employee_id}`, {
+        toast.success(`Employee successfully created! ID: ${updatedFormData.employee_id}`, {
           position: 'top-right',
           autoClose: 3000,
         });
   
         setFormData({
-          ...formData,
-          employee_id: formData.employee_id+1,
+          ...updatedFormData,
+          employee_id: updatedFormData.employee_id + 1,
           name: '',
           email: '',
           role: '',
@@ -105,9 +114,10 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     }
   };
 
+
   const handleCancel = () => {
     console.log("Cancel button clicked, navigating to '/'");
-    navigate('/');
+    navigate('/EmployeeDetailsPage');
   };
   
   useEffect(() => {

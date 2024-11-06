@@ -5,7 +5,18 @@ import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack } from "@chakra-ui/react";
+import { jwtDecode } from 'jwt-decode';
+import AccessDenied from '../Components/AccessDenied';
+
+
+interface IUser {
+  org_id: number;  
+  username: string; 
+  role: string;     
+  email: string;    
+  password?: string; 
+}
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -34,20 +45,42 @@ export const ProjectPage: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>();
     const [project, setProject] = useState<IProject | null>(null);
     const [employees, setEmployees] = useState<any[]>([]);
-
+    const [Role, setRole] = useState<string>("");
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        const fetchProject = async () => {
+        const fetchEmployeeId = async () => {
             try {
-                const id = Number(projectId);
-                const getById = await axios.get(`http://localhost:4000/projects/${id}`);
-                setProject(getById.data);
+              const token = sessionStorage.getItem('authToken');
+              if (!token) {
+                throw new Error('No auth token found');
+              }
+      
+              // Decode the token
+              const decodedToken = jwtDecode<IUser>(token);
+      
+              // Access the role from the decoded token
+              const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
+      
+              // Set the role state
+              setRole(userRole);
+      
             } catch (error) {
-                console.error("Error fetching project:", error);
+              console.error('Failed to fetch role from token:', error);
             }
-        };
+          };
+      
+          const fetchProject = async () => {
+              try {
+                  const id = Number(projectId);
+                  const getById = await axios.get(`http://localhost:4000/projects/${id}`);
+                  setProject(getById.data);
+                } catch (error) {
+                    console.error("Error fetching project:", error);
+                }
+            };
+            fetchEmployeeId();
         fetchProject();
     }, [projectId]);
 
@@ -106,19 +139,18 @@ export const ProjectPage: React.FC = () => {
         <div>
             <NavBar />
             <div style={styles.container}>
-                <div>
-                    <Button onClick={handleEmployees}>Add Employee</Button>
-                </div>
+
                 <div style={styles.projectNameBox}>
                     <h1>{project.project_name}</h1>
-                    <Button
-                        colorPalette='blue'
-                        onClick={handleRedirect}>
-                        invoice
-                    </Button>
-                    <Button colorScheme='green' onClick={() => navigate(`/InvoiceDetailsPage/${projectId}`)}>
-                        View Invoice
-                    </Button>
+                    {(Role === 'Finance Manager' || Role === 'admin' ) && 
+                    <HStack spacing="4" justify="center"> {/* Adjust spacing as needed */}
+                        <Button colorPalette="blue" onClick={handleRedirect}>
+                            Invoice
+                        </Button>
+                        <Button colorPalette='teal' onClick={() => navigate(`/InvoiceDetailsPage/${projectId}`)}>
+                            View Invoice
+                        </Button>
+                    </HStack>}
                 </div>
                 <div style={styles.metricsBox}>
                     <h1 style={styles.keyMetricsHeading}>Key Metrics</h1>
@@ -131,16 +163,24 @@ export const ProjectPage: React.FC = () => {
                 <div style={styles.employeesContainer}>
                     <div style={styles.employeesSection}>
                         <h1>Employees Section</h1>
+                        <div>
+                    <Button colorPalette='green' onClick={handleEmployees}>Add Employee</Button>
+                </div>
                     </div>
                     <div style={styles.employeesGrid}>
                         {employees.map((employee) => (
+                            
+                            
                             <div key={employee.id} style={styles.employeeIdBox}>
                                 <img
-                                    src={"/manager.png"} // Adjust the path as necessary
+                                    src={"/manager.png"}
                                     alt={employee.name}
                                     style={styles.employeeImage}
                                 />
                                 <h1>{employee.name}</h1>
+                                <Button 
+                                colorPalette='orange'
+                                onClick={()=>{console.log(employee.employee_id);navigate(`/AttendanceFormPage/${employee.employee_id}`)}}>Attendance</Button>
                             </div>
                         ))}
                     </div>

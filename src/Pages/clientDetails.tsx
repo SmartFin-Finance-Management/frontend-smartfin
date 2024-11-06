@@ -295,6 +295,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: '100%',
     padding: '20px',
     color: '#ffffff',
+    backgroundColor:"white"
   },
   header: {
     backgroundColor: '#62929e',

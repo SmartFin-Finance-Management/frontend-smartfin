@@ -177,7 +177,7 @@ const FinanceForm: React.FC = () => {
   fetchTransactionId();
 }, []);
 
-if(Role !== 'Finance Manager') return <AccessDenied />;
+if(Role !== 'Finance Manager' && Role !== 'admin' ) return <AccessDenied />;
 
   return (
     <div style={styles.page}>

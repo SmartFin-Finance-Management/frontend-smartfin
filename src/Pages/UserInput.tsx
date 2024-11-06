@@ -98,7 +98,7 @@ const UserInput: React.FC = () => {
   if(Role !== 'admin') return <AccessDenied />;
 
   return (
-    <div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: 'white', minHeight: '100vh' }}>
       <NavBar />
       <div style={styles.container}>
         <h2 style={styles.title}>User Registration Form</h2>

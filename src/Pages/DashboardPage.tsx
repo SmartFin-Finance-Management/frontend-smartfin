@@ -6,6 +6,7 @@ import { Chart, LinearScale, CategoryScale, BarElement, Title, Tooltip, Legend }
 import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
 import dayjs from 'dayjs';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export interface Organisation {
   org_id: number;
@@ -79,7 +80,9 @@ const DashboardPage = () => {
   const [totalProjects, setTotalProjects] = useState<number>(0);
   const [activeProjects, setActiveProjects] = useState<number>(0);
   const [projects, setProjects] = useState<Project[]>([]);
+  const navigate = useNavigate();
 
+  
   useEffect(() => {
     const fetchOrganization = async () => {
       try {
@@ -300,35 +303,53 @@ const DashboardPage = () => {
           </GridItem>
         </Grid>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={6} mb={6}>
+        <Grid templateColumns="repeat(1, 1fr)" gap={6} mb={6}>
           {/* Employee List */}
 {/* Employee List */}
 <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
   <Heading size="xl" mb={4} color="teal.500">Employees</Heading>
   <VStack align="stretch" spacing={2}>
-    {employee && employee.length > 0 ? (
-      // Sort employees by LPA in descending order and display top 5
-      employee
-        .sort((a, b) => b.lpa - a.lpa) // Sorting in descending order by LPA
+  {employee && employee.length > 0 ? (
+  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <thead>
+      <tr style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>
+        <th style={{ padding: '8px' }}>Name</th>
+        <th style={{ padding: '8px' }}>Salary (LPA)</th>
+        <th style={{ padding: '8px' }}>Role</th>
+        <th style={{ padding: '8px' }}>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {employee
+        .sort((a, b) => parseFloat(b.lpa.$numberDecimal) - parseFloat(a.lpa.$numberDecimal)) // Sorting in descending order by LPA
         .slice(0, 5) // Only top 5 employees
         .map((emp) => (
-          <HStack key={emp.employee_id} justify="space-between" borderBottom="1px solid" borderColor="gray.200" pb={2}>
-            <Text>{emp.name}</Text>
-            <span>{parseFloat(emp.lpa.$numberDecimal)}</span>
-            {/* <Text>{emp.lpa}</Text> */}
-            <Text>{emp.role}</Text>
-            <Button colorScheme="blue" size="sm">View</Button>
-          </HStack>
-        ))
-    ) : (
-      <Text>No employees found.</Text>
-    )}
+          <tr key={emp.employee_id} style={{ borderBottom: '1px solid #eee' }}>
+            <td style={{ padding: '8px' }}>{emp.name}</td>
+            <td style={{ padding: '8px' }}>{parseFloat(emp.lpa.$numberDecimal)}</td>
+            <td style={{ padding: '8px' }}>{emp.role}</td>
+            <td style={{ padding: '8px' }}>
+              <button style={{ padding: '4px 8px', color: 'white', backgroundColor: '#3182ce', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              onClick={()=>{  navigate('/EmployeeDetailsPage')
+              }}
+              >
+                View
+              </button>
+            </td>
+          </tr>
+        ))}
+    </tbody>
+  </table>
+) : (
+  <p>No employees found.</p>
+)}
+
   </VStack>
 </GridItem>
 
 
           {/* Financial Reports */}
-          <GridItem colSpan={{ base: 2, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
+          {/* <GridItem colSpan={{ base: 2, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
             <Heading size="md" mb={4} color="teal.500">Financial Reports</Heading>
             <VStack spacing={3} align="stretch">
               <Text>Monthly Expenses: $50,000</Text>
@@ -338,8 +359,8 @@ const DashboardPage = () => {
             <Button mt={4} colorScheme="teal" variant="outline" size="sm">
               View Financial Reports
             </Button>
-          </GridItem>
-        </Grid>
+          </GridItem>*/}
+        </Grid> 
 
       </Box>
       <Footer />
