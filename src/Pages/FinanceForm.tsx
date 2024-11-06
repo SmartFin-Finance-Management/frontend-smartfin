@@ -5,6 +5,9 @@ import NavBar from '../Components/NavBar';
 import Footer from '../Components/Footer';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import AccessDenied from '../Components/AccessDenied';
+
 
 interface IFinanceForm {
   transaction_id: number;
@@ -21,6 +24,13 @@ interface IFinanceForm {
   bank_ifsc: string;
 }
 
+interface IUser {
+  org_id: number;  
+  username: string; 
+  role: string;     
+  email: string;    
+  password?: string; 
+}
 
 
 const FinanceForm: React.FC = () => {
@@ -43,6 +53,7 @@ const FinanceForm: React.FC = () => {
   });
   
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [Role, setRole] = useState<string>("");
 
   const validateFields = () => {
     const newErrors: { [key: string]: string } = {};
@@ -121,11 +132,33 @@ const FinanceForm: React.FC = () => {
   };
 
   useEffect(() => {
-  const fetchTransactionId = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/uniqueTransaction_id');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+
+    const fetchEmployeeId = async () => {
+      try {
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No auth token found');
+        }
+
+        // Decode the token
+        const decodedToken = jwtDecode<IUser>(token);
+
+        // Access the role from the decoded token
+        const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
+
+        // Set the role state
+        setRole(userRole);
+
+      } catch (error) {
+        console.error('Failed to fetch role from token:', error);
+      }
+    };
+
+    const fetchTransactionId = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/uniqueTransaction_id');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
       }
       const data = await response.json();
       setFormData(prev => ({
@@ -140,8 +173,11 @@ const FinanceForm: React.FC = () => {
     }
   };
 
+  fetchEmployeeId();
   fetchTransactionId();
 }, []);
+
+if(Role !== 'Finance Manager') return <AccessDenied />;
 
   return (
     <div style={styles.page}>

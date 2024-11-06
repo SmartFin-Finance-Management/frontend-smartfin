@@ -18,7 +18,19 @@ import {
 import { Field } from "../Components/ui/field";
 import NavBar from '../Components/NavBar';
 import { useNavigate, useParams } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import AccessDenied from '../Components/AccessDenied';
 
+
+interface IUser {
+    org_id: number;  
+    username: string; 
+    role: string;     
+    email: string;    
+    password?: string; 
+  }
+
+  
 interface Finance {
   transaction_id: number;
   project_id: number;
@@ -43,20 +55,43 @@ const InvoiceDetailsPage: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
+  const [Role, setRole] = useState<string>("");
 
   useEffect(() => {
-    const fetchInvoices = async () => {
-      const url = `http://localhost:8000/finance/project/${projectId}`;
-
-      try {
-        const response = await axios.get(url);
-        setInvoices(response.data);
-        setFilteredInvoices(response.data);
-      } catch (error) {
-        console.error("Failed to fetch invoice data:", error);
-      }
-    };
-
+    const fetchEmployeeId = async () => {
+        try {
+          const token = sessionStorage.getItem('authToken');
+          if (!token) {
+            throw new Error('No auth token found');
+          }
+  
+          // Decode the token
+          const decodedToken = jwtDecode<IUser>(token);
+  
+          // Access the role from the decoded token
+          const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
+  
+          // Set the role state
+          setRole(userRole);
+  
+        } catch (error) {
+          console.error('Failed to fetch role from token:', error);
+        }
+      };
+  
+      const fetchInvoices = async () => {
+          const url = `http://localhost:8000/finance/project/${projectId}`;
+          
+          try {
+              const response = await axios.get(url);
+              setInvoices(response.data);
+              setFilteredInvoices(response.data);
+            } catch (error) {
+                console.error("Failed to fetch invoice data:", error);
+            }
+        };
+        
+        fetchEmployeeId();
     fetchInvoices();
   }, [projectId]);
 
@@ -158,6 +193,8 @@ console.log(res);
     }
   };
 
+  if(Role !== 'Finance Manager') return <AccessDenied />;
+  
   return (
     <>
       <NavBar />

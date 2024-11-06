@@ -36,12 +36,6 @@ const TopBar: React.FC = () => {
       <Tooltip content="Click here to Register">
         <Button className='gets' marginRight="1rem" onClick={handleRegister}>Register</Button>
       </Tooltip>
-      <Tooltip content="Click here to EmployeeFormPage">
-        <Button colorScheme="teal" marginRight="1rem" onClick={handleEmployeeFormPage}>EmployeeFormPage</Button>
-      </Tooltip>
-      <Tooltip content="Click here to ProjectDashBoard">
-        <Button colorScheme="teal" marginRight="1rem" onClick={handleProject}>ProjectDetailsPage</Button>
-      </Tooltip>
     </Box>
     // </Box>
   );

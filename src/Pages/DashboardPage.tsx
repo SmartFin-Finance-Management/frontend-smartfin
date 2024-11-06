@@ -74,6 +74,7 @@ export interface Employee {
 const DashboardPage = () => {
   const [organization, setOrganization] = useState<Organisation | null>(null);
   const [budgetDetails, setBudgetDetails] = useState<BudgetDetails | null>(null);
+  const [employee, setEmployee] = useState<Employee[] | null>(null);
   const [totalEmployees, setTotalEmployees] = useState<number>(0);
   const [totalProjects, setTotalProjects] = useState<number>(0);
   const [activeProjects, setActiveProjects] = useState<number>(0);
@@ -120,6 +121,7 @@ const DashboardPage = () => {
           }
         });
         setTotalEmployees(response.data.length);
+        setEmployee(response.data);
       } catch (error) {
         console.error("Failed to fetch employees", error);
       }
@@ -299,19 +301,31 @@ const DashboardPage = () => {
         </Grid>
 
         <Grid templateColumns="repeat(2, 1fr)" gap={6} mb={6}>
-          {/* Employees List */}
-          <GridItem colSpan={{ base: 2, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
-            <Heading size="md" mb={4} color="teal.500">Employees</Heading>
-            <VStack spacing={3} align="stretch">
-              <Text>John Doe - Project Manager</Text>
-              <Text>Jane Smith - Developer</Text>
-              <Text>Samuel Green - Designer</Text>
-              <Text>Anna White - QA Engineer</Text>
-            </VStack>
-            <Button mt={4} colorScheme="teal" variant="outline" size="sm">
-              View All Employees
-            </Button>
-          </GridItem>
+          {/* Employee List */}
+{/* Employee List */}
+<GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
+  <Heading size="xl" mb={4} color="teal.500">Employees</Heading>
+  <VStack align="stretch" spacing={2}>
+    {employee && employee.length > 0 ? (
+      // Sort employees by LPA in descending order and display top 5
+      employee
+        .sort((a, b) => b.lpa - a.lpa) // Sorting in descending order by LPA
+        .slice(0, 5) // Only top 5 employees
+        .map((emp) => (
+          <HStack key={emp.employee_id} justify="space-between" borderBottom="1px solid" borderColor="gray.200" pb={2}>
+            <Text>{emp.name}</Text>
+            <span>{parseFloat(emp.lpa.$numberDecimal)}</span>
+            {/* <Text>{emp.lpa}</Text> */}
+            <Text>{emp.role}</Text>
+            <Button colorScheme="blue" size="sm">View</Button>
+          </HStack>
+        ))
+    ) : (
+      <Text>No employees found.</Text>
+    )}
+  </VStack>
+</GridItem>
+
 
           {/* Financial Reports */}
           <GridItem colSpan={{ base: 2, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
