@@ -1,6 +1,7 @@
 import { IconButton } from "@chakra-ui/react";
 import React from "react";
-import { FaTrash } from 'react-icons/fa';
+// import { FaTrash } from 'react-icons/fa';
+import { MdClose } from "react-icons/md";
 
 interface IProject {
     project_id: number;
@@ -40,7 +41,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onUpd
                 onClick={() => onDelete(project.project_id)}
                 style={styles.deleteButton} // Apply styles to the delete button
             >
-                <FaTrash />
+                <MdClose />
             </IconButton>
             <img src="https://cdn.dribbble.com/users/174036/screenshots/1507631/media/0f7a8787346a1c97faea82156fb82530.gif" alt="Project Icon"  />
             <h2 style={styles.projectName}>{project.project_name}</h2>
