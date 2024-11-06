@@ -47,7 +47,7 @@ const AttendanceFormPage: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
 
     try {
       const token = sessionStorage.getItem(`authToken`);
-      const response = await axios.post(url, { attendance: formData.attendance }, {
+      const response = await axios.post(url, formData.attendance, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

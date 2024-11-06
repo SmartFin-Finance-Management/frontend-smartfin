@@ -46,12 +46,13 @@ const ClientInfo: React.FC = () => {
     const fetchClientProjects = async () => {
       try {
         const token = sessionStorage.getItem('authToken'); // Get the token from the session storage
-        const response = await axios.get(`http://localhost:7000/api/clients/clients/projects/${clientId}`,{
+        const response = await axios.get(`http://localhost:7000/api/projects/projects/client/${clientId}`,{
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
         });
         setProjects(response.data);
+        console.log(projects)
       } catch (error) {
         console.error('Error fetching client projects:', error);
       }

@@ -123,7 +123,7 @@ export const ProjectFormPage: React.FC = () => {
             });
         } catch (error: any) {
             console.error("Error fetching projects:", error);
-            const errorMessage = error.response?.data?.message || 'Failed to create Project';
+            const errorMessage = error.response?.data || 'Failed to create Project';
             toast.error(errorMessage);
         }
     };
