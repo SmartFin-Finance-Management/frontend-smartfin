@@ -114,7 +114,7 @@ const DashboardPage = () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
         const token = sessionStorage.getItem('authToken');
-        const response = await axios.get<Employee[]>(`http://localhost:7000/api/organisation/${orgId}/employees`,{
+        const response = await axios.get<Employee[]>(`http://localhost:7000/api/organisations/${orgId}/employees`,{
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
@@ -292,7 +292,7 @@ const DashboardPage = () => {
            {/* Project Chart */}
            <GridItem colSpan={{ base: 3, md: 1 }} p={6} bg="white" borderRadius="md" boxShadow="sm">
             <Heading size="xl" mb={4} color="teal.500">Project Duration</Heading>
-            <Box width="100%" height="100%">ac
+            <Box width="100%" height="100%">
               <Bar data={chartData} options={chartOptions} />
             </Box>
           </GridItem>

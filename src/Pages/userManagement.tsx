@@ -4,6 +4,8 @@ import Footer from '../Components/Footer';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../Components/NavBar';
+import { jwtDecode } from 'jwt-decode';
+import AccessDenied from '../Components/AccessDenied';
 import bcrypt from 'bcryptjs';
 
 interface IUser {
@@ -14,6 +16,7 @@ interface IUser {
   password?: string;
 }
 
+
 const UserManagement: React.FC = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<IUser[]>([]);
@@ -22,8 +25,35 @@ const UserManagement: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<IUser | null>(null);
+  const [Role, setRole] = useState<string>("");
+
+  
+
 
   useEffect(() => {
+
+    const fetchEmployeeId = async () => {
+      try {
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No auth token found');
+        }
+
+        // Decode the token
+        const decodedToken = jwtDecode<IUser>(token);
+
+        // Access the role from the decoded token
+        const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
+
+        // Set the role state
+        setRole(userRole);
+
+      } catch (error) {
+        console.error('Failed to fetch role from token:', error);
+      }
+    };
+    
+
     const fetchUsers = async () => {
       try {
         const orgId = sessionStorage.getItem('org_id');
@@ -33,7 +63,8 @@ const UserManagement: React.FC = () => {
         console.error('Error fetching users:', error);
       }
     };
-
+    
+    fetchEmployeeId();
     fetchUsers();
   }, []);
 
@@ -81,6 +112,8 @@ const UserManagement: React.FC = () => {
       }
     }
   };
+
+  if(Role !== 'admin') return <AccessDenied />;
 
   return (
     <div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>

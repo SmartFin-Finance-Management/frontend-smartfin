@@ -25,6 +25,7 @@ import InvoiceDetailsPage from './Pages/InvoiceDetailsPage';
 import TermsConditions from './Pages/terms';
 import PrivacyPolicy from './Pages/policy';
 import Contact from './Pages/Contact';
+import AttendanceFormPage from './Pages/AttendanceFormPage';
 import { EmployeesPage } from './Pages/EmployeesPage';
 
 const App: React.FC = () => {
@@ -44,6 +45,8 @@ const App: React.FC = () => {
                     <Route path="/EmployeeDetailsPage" element={<EmployeeDetailsPage />} />
                     <Route path="/project/form" element={<ProjectFormPage />} />
                     <Route path="/project/:projectId" element={<ProjectPage />} />
+
+                    <Route path="/AttendanceFormPage/:empId" element={<AttendanceFormPage />} />
 
                     <Route path="/projects/update/:projectId" element={<ProjectFormPage />} />
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
