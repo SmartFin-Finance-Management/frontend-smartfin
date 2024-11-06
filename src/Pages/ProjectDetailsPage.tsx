@@ -155,7 +155,7 @@ export const ProjectDetailsPage: React.FC = () => {
                     <option value="upcoming">Upcoming</option>
                     <option value="completed">Completed</option>
                 </select>
-                {["total_budget", "allocated_budget", "remaining_budget", "employee_budget", "technical_budget", "additional_budget", "employee_expenses", "technical_expenses", "additional_expenses", "actual_expenses"].map((field) => (
+                {["total_budget", "allocated_budget", "remaining_budget", "employee_budget", "technical_budget", "additional_budget"].map((field) => (
                     <div key={field}>
                         <label>{field.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
                         <Input

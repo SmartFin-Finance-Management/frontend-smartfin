@@ -54,7 +54,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     const annualSalary = hourlyRate * workingHoursPerDay * workingDaysPerYear;
     const lpa = annualSalary / 100000;
     return lpa;
-}
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -66,7 +66,7 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     // Calculate LPA and assign it to formData
     const calculatedLPA = calculateLPA(formData.hourly_rate);
     const updatedFormData = { ...formData, lpa: calculatedLPA };
@@ -83,13 +83,13 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
           Authorization: `Bearer ${token}`
         },
       });
-  
+
       if (response.status === 200 || response.status === 201) {
         toast.success(`Employee successfully created! ID: ${updatedFormData.employee_id}`, {
           position: 'top-right',
           autoClose: 3000,
         });
-  
+
         setFormData({
           ...updatedFormData,
           employee_id: updatedFormData.employee_id + 1,
@@ -119,12 +119,12 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
     console.log("Cancel button clicked, navigating to '/'");
     navigate('/EmployeeDetailsPage');
   };
-  
+
   useEffect(() => {
     const fetchEmployeeId = async () => {
       try {
         const token = sessionStorage.getItem(`authToken`);
-        const response = await fetch('http://localhost:7000/api/employees/employee/getUniqueId',{
+        const response = await fetch('http://localhost:7000/api/employees/employee/getUniqueId', {
           headers: {
             Authorization: `Bearer ${token}` // Add the token to the Authorization header
           }
@@ -153,13 +153,13 @@ const EmployeeFormPage: React.FC<EmployeeFormProps> = ({ onSubmit }) => {
       <div style={styles.container}>
         <h2 style={styles.title}>Employee Registration Form</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
-        
-        {/* <label style={styles.label}>
+
+          {/* <label style={styles.label}>
           Employee ID:
           <input type="number" name="employee_id" value={formData.employee_id} onChange={handleChange} style={styles.input} required />
         </label> */}
 
-        {/* <label style={styles.label}>
+          {/* <label style={styles.label}>
           Organization ID:
           <input type="number" name="org_id" value={formData.org_id} onChange={handleChange} style={styles.input} required />
         </label> */}

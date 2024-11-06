@@ -122,9 +122,8 @@ export const ProjectFormPage: React.FC = () => {
                 autoClose: 3000,
             });
         } catch (error: any) {
-
             console.error("Error fetching projects:", error);
-            const errorMessage = error.response?.data || 'Failed to create Project';
+            const errorMessage = error.response?.data + 'falied to add project' || 'Failed to create employee';
             toast.error(errorMessage);
         }
     };
@@ -188,36 +187,6 @@ export const ProjectFormPage: React.FC = () => {
                         <label style={styles.label}>
                             Employee Budget:
                             <input type="number" name="employee_budget" value={project.employee_budget} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Technical Budget:
-                            <input type="number" name="technical_budget" value={project.technical_budget} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Additional Budget:
-                            <input type="number" name="additional_budget" value={project.additional_budget} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Employee Expenses:
-                            <input type="number" name="employee_expenses" value={project.employee_expenses} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Technical Expenses:
-                            <input type="number" name="technical_expenses" value={project.technical_expenses} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Additional Expenses:
-                            <input type="number" name="additional_expenses" value={project.additional_expenses} onChange={handleChange} style={styles.input} required />
-                        </label>
-
-                        <label style={styles.label}>
-                            Actual Expenses:
-                            <input type="number" name="actual_expenses" value={project.actual_expenses} onChange={handleChange} style={styles.input} required />
                         </label>
 
 
