@@ -88,11 +88,26 @@ export const EmployeesPage: React.FC = () => {
     const handleDelete = async (employeeId: number) => {
         if (project) {
             try {
-                const updatedEmployeesList = project.employees_list.filter(id => id !== employeeId);
-                await axios.get(`http://localhost:3000/employees/projectCompleted/${employeeId}`);
-                const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, updatedEmployeesList);
-                setProject({ ...project, employees_list: updatedEmployeesList });
-                toast.success(`Employee ${employeeId} removed successfully!`);
+                if (project.employees_list.length === 1) {
+                    console.log("chetan");
+                    await axios.get(`http://localhost:3000/employees/projectCompleted/${employeeId}`);
+                    console.log("ananthu");
+                    // setProject({ ...project, employees_list: [] });
+                    const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, []);
+                    console.log("bannu");
+                    setProject({ ...project, employees_list: [] });
+                    toast.success(`Employee ${employeeId} removed successfully!`);
+                }
+                else {
+                    const updatedEmployeesList = project.employees_list.filter(id => id !== employeeId);
+                    await axios.get(`http://localhost:3000/employees/projectCompleted/${employeeId}`);
+                    console.log(employeeId);
+                    console.log(updatedEmployeesList);
+
+                    const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, updatedEmployeesList);
+                    setProject({ ...project, employees_list: updatedEmployeesList });
+                    toast.success(`Employee ${employeeId} removed successfully!`);
+                }
             } catch (error) {
                 toast.error("Error removing employee");
                 console.error("Error updating project:", error);

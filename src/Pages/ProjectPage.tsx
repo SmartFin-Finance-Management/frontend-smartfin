@@ -11,11 +11,11 @@ import AccessDenied from '../Components/AccessDenied';
 
 
 interface IUser {
-  org_id: number;  
-  username: string; 
-  role: string;     
-  email: string;    
-  password?: string; 
+    org_id: number;
+    username: string;
+    role: string;
+    email: string;
+    password?: string;
 }
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -52,35 +52,35 @@ export const ProjectPage: React.FC = () => {
     useEffect(() => {
         const fetchEmployeeId = async () => {
             try {
-              const token = sessionStorage.getItem('authToken');
-              if (!token) {
-                throw new Error('No auth token found');
-              }
-      
-              // Decode the token
-              const decodedToken = jwtDecode<IUser>(token);
-      
-              // Access the role from the decoded token
-              const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
-      
-              // Set the role state
-              setRole(userRole);
-      
-            } catch (error) {
-              console.error('Failed to fetch role from token:', error);
-            }
-          };
-      
-          const fetchProject = async () => {
-              try {
-                  const id = Number(projectId);
-                  const getById = await axios.get(`http://localhost:4000/projects/${id}`);
-                  setProject(getById.data);
-                } catch (error) {
-                    console.error("Error fetching project:", error);
+                const token = sessionStorage.getItem('authToken');
+                if (!token) {
+                    throw new Error('No auth token found');
                 }
-            };
-            fetchEmployeeId();
+
+                // Decode the token
+                const decodedToken = jwtDecode<IUser>(token);
+
+                // Access the role from the decoded token
+                const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
+
+                // Set the role state
+                setRole(userRole);
+
+            } catch (error) {
+                console.error('Failed to fetch role from token:', error);
+            }
+        };
+
+        const fetchProject = async () => {
+            try {
+                const id = Number(projectId);
+                const getById = await axios.get(`http://localhost:4000/projects/${id}`);
+                setProject(getById.data);
+            } catch (error) {
+                console.error("Error fetching project:", error);
+            }
+        };
+        fetchEmployeeId();
         fetchProject();
     }, [projectId]);
 
@@ -142,15 +142,15 @@ export const ProjectPage: React.FC = () => {
 
                 <div style={styles.projectNameBox}>
                     <h1>{project.project_name}</h1>
-                    {(Role === 'Finance Manager' || Role === 'admin' ) && 
-                    <HStack spacing="4" justify="center"> {/* Adjust spacing as needed */}
-                        <Button colorPalette="blue" onClick={handleRedirect}>
-                            Invoice
-                        </Button>
-                        <Button colorPalette='teal' onClick={() => navigate(`/InvoiceDetailsPage/${projectId}`)}>
-                            View Invoice
-                        </Button>
-                    </HStack>}
+                    {(Role === 'Finance Manager' || Role === 'admin') &&
+                        <HStack spacing="4" justify="center"> {/* Adjust spacing as needed */}
+                            <Button colorPalette="blue" onClick={handleRedirect}>
+                                Invoice
+                            </Button>
+                            <Button colorPalette='teal' onClick={() => navigate(`/InvoiceDetailsPage/${projectId}`)}>
+                                View Invoice
+                            </Button>
+                        </HStack>}
                 </div>
                 <div style={styles.metricsBox}>
                     <h1 style={styles.keyMetricsHeading}>Key Metrics</h1>
@@ -164,13 +164,13 @@ export const ProjectPage: React.FC = () => {
                     <div style={styles.employeesSection}>
                         <h1>Employees Section</h1>
                         <div>
-                    <Button colorPalette='green' onClick={handleEmployees}>Add Employee</Button>
-                </div>
+                            <Button colorPalette='green' onClick={handleEmployees}>Add Employee</Button>
+                        </div>
                     </div>
                     <div style={styles.employeesGrid}>
                         {employees.map((employee) => (
-                            
-                            
+
+
                             <div key={employee.id} style={styles.employeeIdBox}>
                                 <img
                                     src={"/manager.png"}
@@ -178,9 +178,9 @@ export const ProjectPage: React.FC = () => {
                                     style={styles.employeeImage}
                                 />
                                 <h1>{employee.name}</h1>
-                                <Button 
-                                colorPalette='orange'
-                                onClick={()=>{console.log(employee.employee_id);navigate(`/AttendanceFormPage/${employee.employee_id}`)}}>Attendance</Button>
+                                <Button
+                                    colorPalette='orange'
+                                    onClick={() => { console.log(employee.employee_id); navigate(`/AttendanceFormPage/${employee.employee_id}`) }}>Attendance</Button>
                             </div>
                         ))}
                     </div>
