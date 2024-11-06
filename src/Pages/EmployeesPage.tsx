@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IProject {
     project_id: number;
@@ -33,8 +35,7 @@ export const EmployeesPage: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>();
     const [project, setProject] = useState<IProject | null>(null);
     const [employees, setEmployees] = useState<IEmployee[]>([]);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEmployeesOnBench = async () => {
@@ -43,6 +44,7 @@ export const EmployeesPage: React.FC = () => {
                 setEmployees(response.data);
             } catch (error) {
                 console.error("Error fetching employees on bench:", error);
+                toast.error("Failed to load employees on bench");
             }
         };
 
@@ -57,6 +59,7 @@ export const EmployeesPage: React.FC = () => {
                 setProject(response.data);
             } catch (error) {
                 console.error("Error fetching project:", error);
+                toast.error("Failed to load project details");
             }
         };
 
@@ -66,121 +69,98 @@ export const EmployeesPage: React.FC = () => {
     const handleAddEmployee = async (employeeId: number) => {
         if (project) {
             try {
-                // Ensure employees_list is correctly updated
-                const employees_list = [...project.employees_list, employeeId];
-                console.log(employees_list);
+                const updatedEmployeesList = [...project.employees_list, employeeId];
                 if (project.status === "ongoing") {
                     const project_id = project.project_id;
-                    for (employeeId of employees_list)
-                        await axios.get(`http://localhost:3000/employees/assignProject/${employeeId}/${project_id}`);
+                    await axios.get(`http://localhost:3000/employees/assignProject/${employeeId}/${project_id}`);
                 }
-                // Send the updated project to the API
-                const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, employees_list);
-                setProject(response.data); // Update local project state with the response data
 
-                setSuccessMessage(`Employee ${employeeId} added successfully!`);
-                setErrorMessage(null); // Clear any previous error message
+                const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, updatedEmployeesList);
+                setProject({ ...project, employees_list: updatedEmployeesList });
+                toast.success(`Employee ${employeeId} added successfully!`);
             } catch (error) {
+                toast.error("Employees budget is exceeding");
                 console.error("Error updating project:", error);
-                setErrorMessage("Failed to add employee. Please try again.");
-                setSuccessMessage(null); // Clear any previous success message
+            }
+        }
+    };
+
+    const handleDelete = async (employeeId: number) => {
+        if (project) {
+            try {
+                const updatedEmployeesList = project.employees_list.filter(id => id !== employeeId);
+                await axios.get(`http://localhost:3000/employees/projectCompleted/${employeeId}`);
+                const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, updatedEmployeesList);
+                setProject({ ...project, employees_list: updatedEmployeesList });
+                toast.success(`Employee ${employeeId} removed successfully!`);
+            } catch (error) {
+                toast.error("Error removing employee");
+                console.error("Error updating project:", error);
             }
         }
     };
 
     // Inline styles
     const styles = {
-        container: {
-            fontFamily: 'Arial, sans-serif',
-            margin: '20px',
-        },
-        table: {
-            width: '100%',
-            borderCollapse: 'collapse' as 'collapse',
-            marginBottom: '20px',
-        },
-        th: {
-            border: '1px solid #dddddd',
-            textAlign: 'left' as 'left',
-            padding: '8px',
-            backgroundColor: '#f2f2f2',
-            fontWeight: 'bold' as 'bold',
-        },
-        td: {
-            border: '1px solid #dddddd',
-            textAlign: 'left' as 'left',
-            padding: '8px',
-        },
-        button: {
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            padding: '5px 10px',
-            border: 'none',
-            cursor: 'pointer' as 'pointer',
-        },
-        projectDetails: {
-            marginTop: '20px',
-        },
-        heading: {
-            color: '#333',
-            fontSize: '24px',
-            fontWeight: 'bold' as 'bold',
-        },
-        subHeading: {
-            fontSize: '20px',
-            marginTop: '10px',
-        },
-        message: {
-            color: 'red',
-            marginBottom: '10px',
-        },
-        success: {
-            color: 'green',
-            marginBottom: '10px',
-        },
+        container: { fontFamily: 'Arial, sans-serif', margin: '20px' },
+        table: { width: '100%', borderCollapse: 'collapse' as 'collapse', marginBottom: '20px' },
+        th: { border: '1px solid #ddd', textAlign: 'left' as 'left', padding: '8px', backgroundColor: '#f2f2f2', fontWeight: 'bold' as 'bold' },
+        td: { border: '1px solid #ddd', textAlign: 'left' as 'left', padding: '8px' },
+        button: { backgroundColor: '#4CAF50', color: 'white', padding: '5px 10px', border: 'none', cursor: 'pointer' as 'pointer' },
+        projectDetails: { marginTop: '20px' },
+        heading: { color: '#333', fontSize: '24px', fontWeight: 'bold' as 'bold' },
+        subHeading: { fontSize: '20px', marginTop: '10px' },
     };
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.heading}>Employees on Bench</h1>
-            {errorMessage && <div style={styles.message}>{errorMessage}</div>}
-            {successMessage && <div style={styles.success}>{successMessage}</div>}
-            <table style={styles.table}>
-                <thead>
-                    <tr>
-                        <th style={styles.th}>Name</th>
-                        <th style={styles.th}>Experience</th>
-                        <th style={styles.th}>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {employees.map((employee) => (
-                        <tr key={employee.employee_id}>
-                            <td style={styles.td}>{employee.name}</td>
-                            <td style={styles.td}>{employee.experience} years</td>
-                            <td style={styles.td}>
-                                <button
-                                    style={styles.button}
-                                    onClick={() => handleAddEmployee(employee.employee_id)}
-                                >
-                                    Add
-                                </button>
-                            </td>
+        <div>
+            <div style={styles.container}>
+                <h1 style={styles.heading}>Employees on Bench</h1>
+                <table style={styles.table}>
+                    <thead>
+                        <tr>
+                            <th style={styles.th}>Name</th>
+                            <th style={styles.th}>Experience</th>
+                            <th style={styles.th}>Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            {project && (
-                <div style={styles.projectDetails}>
-                    <h2 style={styles.subHeading}>Project: {project.project_name}</h2>
-                    <h3 style={styles.subHeading}>Assigned Employees</h3>
-                    <ul>
-                        {project.employees_list.map((empId) => (
-                            <li key={empId}>Employee ID: {empId}</li>
+                    </thead>
+                    <tbody>
+                        {employees.map((employee) => (
+                            <tr key={employee.employee_id}>
+                                <td style={styles.td}>{employee.name}</td>
+                                <td style={styles.td}>{employee.experience} years</td>
+                                <td style={styles.td}>
+                                    <button
+                                        style={styles.button}
+                                        onClick={() => handleAddEmployee(employee.employee_id)}
+                                        disabled={project?.employees_list.includes(employee.employee_id)}
+                                    >
+                                        {project?.employees_list.includes(employee.employee_id) ? "Added" : "Add"}
+                                    </button>
+                                </td>
+                            </tr>
                         ))}
-                    </ul>
-                </div>
-            )}
+                    </tbody>
+                </table>
+
+                {project && (
+                    <div style={styles.projectDetails}>
+                        <h2 style={styles.subHeading}>Project: {project.project_name}</h2>
+                        <h3 style={styles.subHeading}>Assigned Employees</h3>
+                        <ul>
+                            {project.employees_list.map((empId) => (
+                                <li key={empId}>
+                                    Employee ID: {empId}
+                                    <button onClick={() => handleDelete(empId)} style={{ marginLeft: '10px', backgroundColor: '#f44336', color: 'white', border: 'none', padding: '5px' }}>
+                                        Remove
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+            <ToastContainer position="top-center" />
         </div>
     );
 };
