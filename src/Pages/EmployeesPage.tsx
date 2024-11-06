@@ -99,6 +99,7 @@ export const EmployeesPage: React.FC = () => {
                     toast.success(`Employee ${employeeId} removed successfully!`);
                 }
                 else {
+
                     const updatedEmployeesList = project.employees_list.filter(id => id !== employeeId);
                     await axios.get(`http://localhost:3000/employees/projectCompleted/${employeeId}`);
                     console.log(employeeId);
