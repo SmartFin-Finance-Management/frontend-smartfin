@@ -26,6 +26,7 @@ import TermsConditions from './Pages/terms';
 import PrivacyPolicy from './Pages/policy';
 import Contact from './Pages/Contact';
 import AttendanceFormPage from './Pages/AttendanceFormPage';
+import { EmployeesPage } from './Pages/EmployeesPage';
 
 const App: React.FC = () => {
     return (
@@ -50,6 +51,7 @@ const App: React.FC = () => {
                     <Route path="/projects/update/:projectId" element={<ProjectFormPage />} />
                     <Route path="/clientInfo" element={<ClientInfo />} /> {/* Corrected casing */}
 
+                    <Route path="/projects/:projectId/employees" element={<EmployeesPage />} />
 
                     <Route path="/client/:clientId" element={<ClientInfo />} />
                     <Route path="/userInput" element={<UserInput />} />

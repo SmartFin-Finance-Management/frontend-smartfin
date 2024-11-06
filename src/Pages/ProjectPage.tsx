@@ -90,28 +90,34 @@ export const ProjectPage: React.FC = () => {
     };
 
     const handleRedirect = () => {
-      const projectId = project.project_id; 
-      const clientId = project.client_id;
-  
-      // Navigate to FinanceFormPage with project_id and client_id in state
-      navigate('/FinanceForm', {
-        state: { project_id: projectId, client_id: clientId },
-      });
+        const projectId = project.project_id;
+        const clientId = project.client_id;
+
+        // Navigate to FinanceFormPage with project_id and client_id in state
+        navigate('/FinanceForm', {
+            state: { project_id: projectId, client_id: clientId },
+        });
     };
+    const handleEmployees = () => {
+        navigate(`/projects/${projectId}/employees`);
+    }
 
     return (
         <div>
             <NavBar />
             <div style={styles.container}>
+                <div>
+                    <Button onClick={handleEmployees}>Add Employee</Button>
+                </div>
                 <div style={styles.projectNameBox}>
                     <h1>{project.project_name}</h1>
-                    <Button 
-                    colorPalette='blue'
-                    onClick={handleRedirect}>
-                      invoice
+                    <Button
+                        colorPalette='blue'
+                        onClick={handleRedirect}>
+                        invoice
                     </Button>
                     <Button colorScheme='green' onClick={() => navigate(`/InvoiceDetailsPage/${projectId}`)}>
-                      View Invoice
+                        View Invoice
                     </Button>
                 </div>
                 <div style={styles.metricsBox}>

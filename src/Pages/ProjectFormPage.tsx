@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface IProject {
     project_id: number;
@@ -26,15 +26,9 @@ interface IProject {
     employees_list: number[];
 }
 
-interface IEmployee {
-    id: number;
-    name: string;
-}
-
 export const ProjectFormPage: React.FC = () => {
     const location = useLocation();
     const { client_id = 0 } = location.state || {};
-    const [employees, setEmployees] = useState<IEmployee[]>([]);
     const [project, setFormData] = useState<IProject>({
         project_id: 0,
         org_id: 0,
@@ -55,22 +49,16 @@ export const ProjectFormPage: React.FC = () => {
         actual_expenses: 0,
         employees_list: [],
     });
-    const navigate = useNavigate();
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]:
-                name === 'employees_list'
-                    ? Array.from((e.target as HTMLSelectElement).selectedOptions, option => Number(option.value))
-                    : name === 'total_budget' || name === 'allocated_budget' ||
-                        name === 'remaining_budget' || name === 'employee_budget' ||
-                        name === 'technical_budget' || name === 'additional_budget' ||
-                        name === 'employee_expenses' || name === 'technical_expenses' ||
-                        name === 'additional_expenses' || name === 'actual_expenses'
-                        ? Number(value)
-                        : value,
+            [name]: name === 'client_id' ||
+                name === 'total_budget' || name === 'allocated_budget' ||
+                name === 'remaining_budget' || name === 'employee_budget' ||
+                name === 'technical_budget' || name === 'additional_budget' ||
+                name === 'employee_expenses' || name === 'technical_expenses' ||
+                name === 'additional_expenses' || name === 'actual_expenses' ? Number(value) : value
         }));
     };
 
@@ -78,10 +66,14 @@ export const ProjectFormPage: React.FC = () => {
         const fetchProjectId = async () => {
             try {
                 const response = await axios.get('http://localhost:4000/projects/getUniqueId');
+
                 if (response.status !== 200) {
                     throw new Error('Network response was not ok');
                 }
+
                 const data = response.data;
+                //console.log(data);
+
                 setFormData(prev => ({
                     ...prev,
                     project_id: data.max_project_id + 1,
@@ -92,27 +84,19 @@ export const ProjectFormPage: React.FC = () => {
             }
         };
 
-        const fetchEmployees = async () => {
-            try {
-                const response = await axios.get("http://localhost:3000/employeesBench");
-                setEmployees(response.data);
-            } catch (error) {
-                console.error("Error fetching employees:", error);
-                toast.error("Failed to fetch employees.");
-            }
-        };
-
         fetchProjectId();
-        fetchEmployees();
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log(client_id);
+        //project.employees_list = [1]; // Example employee IDs
         const orgId = Number(sessionStorage.getItem("org_id") || 0);
+        console.log(orgId);
         const url = `http://localhost:5000/${orgId}/projects`;
 
         try {
-            await axios.post(url, project);
+            await axios.post(url, project,);
             setFormData({
                 project_id: project.project_id + 1,
                 org_id: 0,
@@ -153,6 +137,7 @@ export const ProjectFormPage: React.FC = () => {
                         <h2 style={styles.title}>Project Information</h2>
                     </div>
                     <form onSubmit={handleSubmit} style={styles.form}>
+
                         <label style={styles.label}>
                             Project Name:
                             <input type="text" name="project_name" value={project.project_name} onChange={handleChange} style={styles.input} required />
@@ -215,24 +200,6 @@ export const ProjectFormPage: React.FC = () => {
                         </label>
 
                         <label style={styles.label}>
-                            Employees:
-                            <select
-                                name="employees_list"
-                                value={project.employees_list.map(String)} // Convert to string array for compatibility
-                                onChange={handleChange}
-                                style={styles.input}
-                                multiple
-                                required
-                            >
-                                {employees.map((employee) => (
-                                    <option key={employee.id} value={employee.id}>
-                                        {employee.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-
-                        <label style={styles.label}>
                             Employee Expenses:
                             <input type="number" name="employee_expenses" value={project.employee_expenses} onChange={handleChange} style={styles.input} required />
                         </label>
@@ -252,74 +219,75 @@ export const ProjectFormPage: React.FC = () => {
                             <input type="number" name="actual_expenses" value={project.actual_expenses} onChange={handleChange} style={styles.input} required />
                         </label>
 
-                        <div style={styles.buttonContainer}>
-                            <button type="submit" style={styles.button}>Submit</button>
-                            <button type="button" style={styles.button} onClick={() => navigate('/project')}>Cancel</button>
-                        </div>
+
+                        <button type="submit" style={styles.button}>
+                            Submit
+                        </button>
                     </form>
                 </div>
             </div>
             <Footer />
-            <ToastContainer />
+            <ToastContainer style={{ top: '5%', left: '50%', transform: 'translateX(-50%)' }} />
         </div>
     );
 };
 
 const styles: Record<string, React.CSSProperties> = {
     container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f5f5f5',
+        display: 'grid',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        maxWidth: '900px',
+        margin: '2rem auto',
+        padding: '20px',
+        border: '1px solid #ddd',
+        background: "#fdfdff",
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        fontFamily: 'Arial, sans-serif',
     },
     content: {
-        width: '80%',
-        maxWidth: '600px',
-        background: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        flexDirection: 'row',
+        flex: 1,
     },
     titleContainer: {
-        textAlign: 'center',
-        marginBottom: '20px',
+        flex: 1,
+        marginRight: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     title: {
-        fontSize: '24px',
-        fontWeight: 'bold',
+        fontSize: '2rem',
+        color: '#333',
+        textAlign: 'center',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px',
+        flex: 2,
     },
     label: {
-        display: 'flex',
-        flexDirection: 'column',
-        fontSize: '16px',
-        fontWeight: '500',
+        marginBottom: '10px',
     },
     input: {
         padding: '8px',
-        border: '1px solid #ccc',
         borderRadius: '4px',
-        fontSize: '16px',
-    },
-    buttonContainer: {
-        display: 'flex',
-        justifyContent: 'space-between',
+        border: '1px solid #ccc',
+        marginTop: '4px',
+        width: '100%',
     },
     button: {
-        padding: '10px 15px',
-        border: 'none',
-        borderRadius: '4px',
-        backgroundColor: '#28a745',
+        padding: '10px',
+        background: '#007bff',
         color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
         cursor: 'pointer',
         fontSize: '16px',
-    },
+        transition: 'background-color 0.3s',
+    }
 };
 
 export default ProjectFormPage;
