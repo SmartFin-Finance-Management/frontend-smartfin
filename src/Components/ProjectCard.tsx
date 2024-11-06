@@ -34,7 +34,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onUpd
     return (
         <div style={styles.projectCard}>
             <IconButton
-                colorScheme='red'
+                colorPalette='red'
                 aria-label="Delete"
                 size="sm"
                 onClick={() => onDelete(project.project_id)}
@@ -42,7 +42,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onView, onUpd
             >
                 <FaTrash />
             </IconButton>
-            <img src="https://via.placeholder.com/80" alt="Project Icon" style={styles.icon} />
+            <img src="https://cdn.dribbble.com/users/174036/screenshots/1507631/media/0f7a8787346a1c97faea82156fb82530.gif" alt="Project Icon"  />
             <h2 style={styles.projectName}>{project.project_name}</h2>
             <p style={styles.budget}>Total Budget: ${project.total_budget}</p>
             <div style={styles.buttonContainer}>
