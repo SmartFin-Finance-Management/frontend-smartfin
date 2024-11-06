@@ -6,6 +6,8 @@ import Footer from '../Components/Footer';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../Components/NavBar';
+import { jwtDecode } from 'jwt-decode';
+import AccessDenied from '../Components/AccessDenied';
 
 interface IUserForm {
   org_id: number;
@@ -16,6 +18,7 @@ interface IUserForm {
 }
 
 const UserInput: React.FC = () => {
+  const [Role, setRole] = useState<string>("");
   const [formData, setFormData] = useState<IUserForm>({
     org_id: 0,
     username: '',
@@ -25,11 +28,33 @@ const UserInput: React.FC = () => {
   });
 
   useEffect(() => {
+    const fetchEmployeeId = async () => {
+      try {
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('No auth token found');
+        }
+
+        // Decode the token
+        const decodedToken = jwtDecode<IUser>(token);
+
+        // Access the role from the decoded token
+        const userRole = decodedToken.role; // Ensure `role` exists in your JWT payload
+
+        // Set the role state
+        setRole(userRole);
+
+      } catch (error) {
+        console.error('Failed to fetch role from token:', error);
+      }
+    };
+
     const fetchOrgId = () => {
       const orgId = Number(sessionStorage.getItem('org_id') || 0);
       setFormData(prev => ({ ...prev, org_id: orgId })); // Ensure org_id is set correctly
     };
-
+    
+    fetchEmployeeId();
     fetchOrgId();
   }, []);
 
@@ -46,7 +71,7 @@ const UserInput: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:7000/api/auth/`, formData);
+      const response = await axios.post(`http://localhost:7000/api/auth/register`, formData);
       if (response.status === 200 || response.status === 201) {
         toast.success('User added successfully!', {
           position: 'top-right',
@@ -69,6 +94,8 @@ const UserInput: React.FC = () => {
       toast.error('Error adding user. Please try again.');
     }
   };
+
+  if(Role !== 'admin') return <AccessDenied />;
 
   return (
     <div style={{ backgroundColor: '#546a7b', minHeight: '100vh' }}>
