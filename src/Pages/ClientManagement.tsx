@@ -104,7 +104,7 @@ const ClientManagement: React.FC = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    backgroundColor: '#546a7b',
+    backgroundColor: 'white',
     minHeight: '100vh',
     color: '#fdfdff',
     display: 'flex',
