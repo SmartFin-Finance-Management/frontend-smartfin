@@ -88,6 +88,7 @@ export const ProjectPage: React.FC = () => {
         const fetchEmployees = async () => {
             if (project && project.employees_list) {
                 try {
+                    //console.log("employeeList" + project.employees_list);
                     const employeePromises = project.employees_list.map(employeeId =>
                         axios.get(`http://localhost:3000/employees/${employeeId}`)
                     );
