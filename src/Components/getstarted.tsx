@@ -15,16 +15,11 @@ const Getstarted: React.FC = () => {
 
   return (
 
-     
       <Box>
-        
         <Button className="gets" colorScheme="purple" size="lg" marginTop="8" onClick={handleRegister}>
       Get Started
     </Button>
       </Box>
-      
-     
-   
   );
 };
 

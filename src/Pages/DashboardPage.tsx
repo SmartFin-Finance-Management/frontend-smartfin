@@ -279,6 +279,10 @@ const DashboardPage = () => {
                   <Text>Spent</Text>
                   <Text fontWeight="bold">{budgetDetails?.spent || 0}</Text>
                 </HStack>
+                <HStack justify="space-between" borderBottom="1px solid" borderColor="gray.200" pb={2}>
+                  <Text>Profit</Text>
+                  <Text fontWeight="bold">{Number(budgetDetails?.spent) * 0.9 || 0}</Text>
+                </HStack>
                 <HStack justify="space-between">
                   <Text>Remaining</Text>
                   <Text fontWeight="bold">{budgetDetails?.remaining || 0}</Text>
