@@ -158,7 +158,7 @@ export const ProjectPage: React.FC = () => {
                     <div style={styles.metricsGrid}>
                         <div><strong>Start Date:</strong> {project.start_date}</div>
                         <div><strong>End Date:</strong> {project.end_date}</div>
-                        <div><strong>Total Budget:</strong> ${project.total_budget}</div>
+                        <div><strong>Total Budget:</strong> ₹{project.total_budget}</div>
                     </div>
                 </div>
                 <div style={styles.employeesContainer}>
