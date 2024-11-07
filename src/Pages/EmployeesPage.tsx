@@ -89,12 +89,11 @@ export const EmployeesPage: React.FC = () => {
         if (project) {
             try {
                 if (project.employees_list.length === 1) {
-                    console.log("chetan");
+                    //console.log("chetan");
                     await axios.get(`http://localhost:3000/employees/projectCompleted/${employeeId}`);
                     console.log("ananthu");
                     // setProject({ ...project, employees_list: [] });
                     const response = await axios.put(`http://localhost:4000/projects/${project.project_id}/employees`, []);
-                    console.log("bannu");
                     setProject({ ...project, employees_list: [] });
                     toast.success(`Employee ${employeeId} removed successfully!`);
                 }
